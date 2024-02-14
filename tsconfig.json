@@ -7,8 +7,12 @@
         "moduleResolution": "Node",
         "strict": true,
         "noImplicitAny": false,
-        "target": "ESNext"
+        "target": "ESNext",
+
+        // https://esbuild.github.io/api/#jsx-factory
+        "jsxFactory": "Deimos.React.createElement",
+        "jsx": "react"
     },
 
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*"]
 }
