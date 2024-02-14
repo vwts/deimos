@@ -11,6 +11,10 @@ import {
     join
 } from 'path';
 
+import {
+    initIpc
+} from './ipcMain';
+
 console.log("[deimos] inicializando...");
 
 class BrowserWindow extends electron.BrowserWindow {
@@ -20,11 +24,12 @@ class BrowserWindow extends electron.BrowserWindow {
 
             options.webPreferences.preload = join(__dirname, "preload.js");
 
-            process.env.APP_PATH = app.getAppPath();
             process.env.DISCORD_PRELOAD = original;
-        }
 
-        super(options);
+            super(options);
+
+            initIpc(this);
+        } else super(options);
     }
 }
 
@@ -41,11 +46,12 @@ require.cache[electronPath]!.exports = {
     BrowserWindow
 };
 
-// patch appsettingsa para forçar habilitação dos devtools
+// patch appsettings para forçar habilitação dos devtools
 Object.defineProperty(global, "appSettings", {
-    set: (v) => {
+    set: (v: typeof global.appSettings) => {
         v.set("DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING", true);
 
+        // @ts-ignore
         delete global.appSettings;
 
         global.appSettings = v;
@@ -57,21 +63,20 @@ Object.defineProperty(global, "appSettings", {
 process.env.DATA_DIR = join(app.getPath("userData"), "..", "Deimos");
 
 electron.app.whenReady().then(() => {
+    installExt(REACT_DEVELOPER_TOOLS)
+        .then(() => console.log("devtools do react instalado"))
+        .catch((err) => console.error("falha ao instalar devtools do react", err));
+
     // remover csp
     electron.session.defaultSession.webRequest.onHeadersReceived(({ responseHeaders, url}, cb) => {
-        if (responseHeaders && url.endsWith(".css")) {
+        if (responseHeaders) {
             delete responseHeaders["content-security-policy-report-only"];
             delete responseHeaders["content-security-policy"];
-
-            // provavelmente fazer o github raw funcionar (não testado)
-            responseHeaders["content-type"] = ["text/css"];
-
-            responseHeaders;
         }
 
         cb({
             cancel: false,
-            responseHeaders: responseHeaders
+            responseHeaders
         });
     });
 
