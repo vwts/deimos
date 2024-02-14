@@ -11,17 +11,21 @@ import {
 } from 'perf_hooks';
 
 /**
- * @type {esbuild.WatchMode}
+ * @type {esbuild.WatchMode|false}
  */
-const watch = {
+const watch = process.argv.includes("--watch") ? {
     onRebuild: (err) => {
         if (err) console.error("erro de build", err.message);
 
         else console.log("reconstruído!");
     }
-};
+} : false;
 
 // https://github.com/evanw/esbuild/issues/619#issuecomment-751995294
+
+/**
+ * @type {esbuild.Plugin}
+ */
 const makeAllPackagesExternalPlugin = {
     name: 'make-all-packages-external',
 
@@ -35,6 +39,9 @@ const makeAllPackagesExternalPlugin = {
     }
 };
 
+/**
+ * @type {esbuild.Plugin}
+ */
 const globPlugins = {
     name: "glob-plugins",
 

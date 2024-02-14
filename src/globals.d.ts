@@ -1,7 +1,5 @@
-import TDeimosNative from './DeimosNative';
-
 declare global {
-    export var DeimosNative: typeof TDeimosNative;
+    export var DeimosNative: typeof import('./DeimosNative').default;
 
     export var appSettings: {
         set(setting: string, v: any): void;
@@ -13,3 +11,5 @@ declare global {
         };
     }
 }
+
+export { };

@@ -35,6 +35,15 @@ class BrowserWindow extends electron.BrowserWindow {
 
 Object.assign(BrowserWindow, electron.BrowserWindow);
 
+// esbuild pode renomear o browserwindow, que lidera para ser excluído
+// do getfocusedwindow(), então é necessário
+//
+// https://github.com/discord/electron/blob/13-x-y/lib/browser/api/browser-window.ts#L60-L62
+Object.defineProperty(BrowserWindow, "name", {
+    value: "BrowserWindow",
+    configurable: true
+});
+
 // substituir exports do electron com nosso browserwindow customizado
 const electronPath = require.resolve("electron");
 
