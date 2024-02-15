@@ -1,5 +1,5 @@
 // existe para exportar defineplugin({...}) padrão
-export default function definePlugin(p: Plugin) {
+export default function definePlugin(p: PluginDef) {
     return p;
 }
 
@@ -18,9 +18,14 @@ export interface Patch {
 export interface Plugin {
     name: string;
     description: string;
-    author: string[];
+    author: string;
 
     start?(): void;
 
     patches?: Patch[];
+}
+
+// @ts-ignore
+interface PluginDef extends Plugin {
+    patches?: Omit<Patch, "plugin">[];
 }
