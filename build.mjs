@@ -3,6 +3,10 @@
 import esbuild from 'esbuild';
 
 import {
+    execSync
+} from 'child_process';
+
+import {
     readdirSync
 } from 'fs';
 
@@ -80,6 +84,29 @@ const globPlugins = {
     }
 };
 
+const gitHash = execSync("git rev-parse --short HEAD", {
+    encoding: "utf-8"
+}).trim();
+
+/**
+ * @type {esbuild.Plugin}
+ */
+const gitHashPlugin = {
+    name: "git-hash-plugin",
+
+    setup: build => {
+        const filter = /^git-hash$/;
+
+        build.onResolve({ filter }, args => ({
+            namespace: "git-hash", path: args.path
+        }));
+
+        build.onLoad({ filter, namespace: "git-hash" }, () => ({
+            contents: `export default "${gitHash}"`
+        }));
+    }
+};
+
 const begin = performance.now();
 
 await Promise.all([
@@ -116,9 +143,10 @@ await Promise.all([
         target: ["esnext"],
         footer: { js: "//# sourceURL=DeimosRenderer" },
         globalName: "Deimos",
-        external: ["plugins"],
+        external: ["plugins", "git-hash"],
         plugins: [
-            globPlugins
+            globPlugins,
+            gitHashPlugin
         ],
         sourcemap: "inline",
         watch,
