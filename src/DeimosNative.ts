@@ -1,20 +1,48 @@
-import {
-    IPC_QUICK_CSS_UPDATE,
-    IPC_GET_QUICK_CSS
-} from './utils/ipcEvents';
+import IPC_EVENTS from './utils/IpcEvents';
 
 import {
+    IpcRenderer,
     ipcRenderer
 } from 'electron';
 
 export default {
-    handleQuickCssUpdate(cb: (s: string) => void) {
-        ipcRenderer.on(IPC_QUICK_CSS_UPDATE, (_, css) => {
-            cb(css);
-        });
+    getVersions: () => process.versions,
+
+    ipc: {
+        send(event: string, ...args: any[]) {
+            if (event in IPC_EVENTS) ipcRenderer.send(event, ...args);
+
+            else throw new Error(`evento ${event} não permitido.`);
+        },
+
+        sendSync(event: string, ...args: any[]) {
+            if (event in IPC_EVENTS) return ipcRenderer.sendSync(event, ...args);
+
+            else throw new Error(`evento ${event} não permitido.`);
+        },
+
+        on(event: string, listener: Parameters<IpcRenderer["on"]>[1]) {
+            if (event in IPC_EVENTS) ipcRenderer.on(event, listener);
+
+            else throw new Error(`evento ${event} não permitido.`);
+        },
+
+        invoke(event: string, ...args: any[]) {
+            if (event in IPC_EVENTS) return ipcRenderer.invoke(event, ...args);
+
+            else throw new Error(`evento ${event} não permitido.`);
+        }
     },
 
-    getQuickCss: () => ipcRenderer.invoke(IPC_GET_QUICK_CSS) as Promise<string>,
+    require(mod: string) {
+        const settings = ipcRenderer.sendSync(IPC_EVENTS.GET_SETTINGS);
 
-    getVersions: () => process.versions
+        try {
+            if (!JSON.parse(settings).unsafeRequire) throw "não";
+        } catch {
+            throw new Error("require não-seguro não é permitido. habilite-o nas configurações e tente novamente.");
+        }
+
+        return require(mod);
+    }
 };

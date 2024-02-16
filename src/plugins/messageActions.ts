@@ -5,7 +5,7 @@ import {
 import {
     find,
     findByProps
-} from '../utils/webpack';
+} from '../webpack';
 
 import definePlugin from '../utils/types';
 
@@ -13,6 +13,8 @@ export default definePlugin({
     name: "MessageQuickActions",
     description: "exclusão e edição rápidas",
     author: "vuwints",
+
+    dependencies: ["MessageClicksApi"],
 
     start() {
         const { deleteMessage, startEditMessage } = findByProps("deleteMessage");

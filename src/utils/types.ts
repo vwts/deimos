@@ -23,6 +23,9 @@ export interface Plugin {
     start?(): void;
 
     patches?: Patch[];
+
+    dependencies?: string[],
+    required?: boolean;
 }
 
 // @ts-ignore

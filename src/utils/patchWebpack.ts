@@ -4,7 +4,7 @@ import {
 
 import {
     _initWepack
-} from './webpack';
+} from '../webpack';
 
 import Logger from './logger';
 
@@ -110,10 +110,15 @@ function patchPush() {
 
                             try {
                                 const newCode = code.replace(replacement.match, replacement.replace);
-                                const newMod = (0, eval)(`// módulo webpack ${id} - patchado por ${[...patchedBy].join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${id}`);
 
-                                code = newCode;
-                                mod = newMod;
+                                if (newCode === code) {
+                                    logger.warn(`patch por ${patch.plugin} não possui efeito: ${replacement.match}`);
+                                } else {
+                                    const newMod = (0, eval)(`// módulo webpack ${id} - patched por ${[...patchedBy].join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${id}`);
+
+                                    code = newCode;
+                                    mod = newMod;
+                                }
                             } catch (err) {
                                 logger.error("falha ao aplicar patch do", patch.plugin, err);
 

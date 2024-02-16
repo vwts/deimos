@@ -2,7 +2,7 @@ import definePlugin from '../utils/types';
 
 import {
     findByProps
-} from '../utils/webpack';
+} from '../webpack';
 
 const DO_NOTHING = () => void 0;
 
@@ -10,6 +10,8 @@ export default definePlugin({
     name: "NoTrack",
     description: "desabilita todos os tracks e reports de crash do discord",
     author: "vuwints",
+    
+    required: true,
 
     start() {
         findByProps("getSuperPropertiesBase64", "track").track = DO_NOTHING;

@@ -6,6 +6,7 @@ export default definePlugin({
     name: "Settings",
     description: "adiciona ui de configurações e info de debug",
     author: "vuwints",
+    required: true,
 
     patches: [{
         find: "default.versionHash",
@@ -36,7 +37,7 @@ export default definePlugin({
         find: "Messages.ACTIVITY_SETTINGS",
 
         replacement: {
-            match: /\{section:(.{1,2})\.SectionTypes\.HEADER,label:(.{1,2})\.default\.Messages\.ACTIVITY_SETTINGS\}/,
+            match: /\{section:(.{1,2})\.SectionTypes\.HEADER,\s*label:(.{1,2})\.default\.Messages\.ACTIVITY_SETTINGS\}/,
 
             replace: (m, mod) => `{section:${mod}.SectionTypes.HEADER,label:"Deimos"},` + `{section:"Deimos",label:"Deimos",element:Deimos.Components.Settings},` + `{section:${mod}.SectionTypes.DIVIDER},${m}`
         }
