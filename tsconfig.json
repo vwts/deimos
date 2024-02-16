@@ -10,7 +10,7 @@
         "target": "ESNext",
 
         // https://esbuild.github.io/api/#jsx-factory
-        "jsxFactory": "Deimos.Webpack.React.createElement",
+        "jsxFactory": "Deimos.Webpack.Common.React.createElement",
         "jsx": "react"
     },
 

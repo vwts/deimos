@@ -10,6 +10,7 @@ export default definePlugin({
 
         replacement: {
             match: /\.useClickMessage=function\((.{1,2}),(.{1,2})\).+?function\((.{1,2})\){/,
+            
             replace: (m, message, channel, event) =>
                 // o parâmetro message é escondido pelo parâmetro event
 

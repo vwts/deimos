@@ -3,7 +3,7 @@ import IpcEvents from '../utils/IpcEvents';
 
 import {
     React
-} from '../webpack';
+} from '../webpack/common';
 
 import {
     mergeDefaults

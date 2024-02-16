@@ -1,6 +1,6 @@
 import {
     React
-} from '../webpack';
+} from '../webpack/common';
 
 /**
  * função lazy. na primeira chamada, o valor é computado.
@@ -22,17 +22,37 @@ export function lazy<T>(factory: () => T): () => T {
  * @param factory factory
  * @param fallbackValue o valor fallback que será utilizado a não ser que a promise seja resolvida
  * 
- * @returns um estado que será vazio
+ * @returns [value, error, isPending]
  */
-export function useAwaiter<T>(factory: () => Promise<T>, fallbackValue: T | null = null): T | null {
-    const [res, setRes] = React.useState<T | null>(fallbackValue);
+export function useAwaiter<T>(factory: () => Promise<T>): [T | null, any, boolean];
+export function useAwaiter<T>(factory: () => Promise<T>, fallbackValue: T): [T, any, boolean];
+
+export function useAwaiter<T>(factory: () => Promise<T>, fallbackValue: T | null = null): [T | null, any, boolean] {
+    const [state, setState] = React.useState({
+        value: fallbackValue,
+        error: null as any,
+        pending: true
+    });
 
     React.useEffect(() => {
-        factory().then(setRes);
+        let isAlive = true;
+
+        factory()
+            .then(value => isAlive && setState({
+                value,
+                error: null,
+                pending: false
+            }))
+            
+            .catch(error => isAlive && setState({
+                value: null,
+                error,
+                pending: false
+            }));
     }, []);
     
-    return res;
-}
+    return [state.value, state.error, state.pending];
+};
 
 /**
  * um componente lazy. o método factory é chamado no primeiro render.

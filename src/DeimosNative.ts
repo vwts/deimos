@@ -15,7 +15,7 @@ export default {
             else throw new Error(`evento ${event} não permitido.`);
         },
 
-        sendSync(event: string, ...args: any[]) {
+        sendSync<T = any>(event: string, ...args: any[]): T {
             if (event in IPC_EVENTS) return ipcRenderer.sendSync(event, ...args);
 
             else throw new Error(`evento ${event} não permitido.`);
@@ -27,7 +27,7 @@ export default {
             else throw new Error(`evento ${event} não permitido.`);
         },
 
-        invoke(event: string, ...args: any[]) {
+        invoke<T = any>(event: string, ...args: any[]): Promise<T> {
             if (event in IPC_EVENTS) return ipcRenderer.invoke(event, ...args);
 
             else throw new Error(`evento ${event} não permitido.`);
