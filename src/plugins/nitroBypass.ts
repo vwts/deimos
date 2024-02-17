@@ -5,7 +5,7 @@ import {
 
 import {
     findByProps
-} from '../utils/webpack';
+} from '../webpack';
 
 import definePlugin from '../utils/types';
 
@@ -27,7 +27,7 @@ export default definePlugin({
                     match: new RegExp(`${func}:function\\(.+?}`),
 
                     replace: `${func}:function (e) { return true; }`
-                }
+                };
             })
         }
     ],
@@ -38,11 +38,13 @@ export default definePlugin({
         } = findByProps("getCustomEmojiById");
 
         // remover qualquer necessidade nitro para qualquer uma das configurações de streaming
-        findByProps("ApplicationStreamPresets").ApplicationStreamSettingRequirements
+        findByProps("ApplicationStreamPresets")
+            .ApplicationStreamSettingRequirements
+
             .forEach(x => {
                 delete x.userPremiumType;
                 delete x.guildPremiumTier
-        });
+            });
 
         addPreSendListener((_, messageObj) => {
             const guildId = window.location.href.split("channels/")[1].split("/")[0];
@@ -59,7 +61,7 @@ export default definePlugin({
 
                 messageObj.content = messageObj.content.replace(emojiString, ` ${url} `);
             }
-        })
+        });
 
         addPreEditListener((_, __, messageObj) => {
             const guildId = window.location.href.split("channels/")[1].split("/")[0];
@@ -74,6 +76,6 @@ export default definePlugin({
 
                 messageObj.content = messageObj.content.replace(emojiStr, ` ${url} `);
             }
-        })
+        });
     }
-})
+});
