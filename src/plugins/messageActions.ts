@@ -1,5 +1,6 @@
 import {
-    addClickListener
+    addClickListener,
+    removeClickListener
 } from '../api/MessageEvents';
 
 import {
@@ -8,6 +9,11 @@ import {
 } from '../webpack';
 
 import definePlugin from '../utils/types';
+
+let isDeletePressed = false;
+
+const keydown = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = true);
+const keyup = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = false);
 
 export default definePlugin({
     name: "MessageQuickActions",
@@ -25,15 +31,10 @@ export default definePlugin({
 
         let isDeletePressed = false;
 
-        document.addEventListener("keydown", e => {
-            if (e.key === "Backspace") isDeletePressed = true;
-        });
+        document.addEventListener("keydown", keydown);
+        document.addEventListener("keyup", keyup);
 
-        document.addEventListener("keyup", e => {
-            if (e.key === "Backspace") isDeletePressed = false;
-        });
-
-        addClickListener((msg, chan, event) => {
+        this.onClick = addClickListener((msg, chan, event) => {
             const isMe = msg.author.id === getCurrentUser().id;
 
             if (!isDeletePressed) {
@@ -48,5 +49,12 @@ export default definePlugin({
                 event.preventDefault();
             }
         });
+    },
+
+    stop() {
+        removeClickListener(this.onClick);
+
+        document.removeEventListener("keydown", keydown);
+        document.removeEventListener("keyup", keyup);
     }
 });

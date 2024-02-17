@@ -1,7 +1,3 @@
-import Plugins from 'plugins';
-import IpcEvents from '../utils/IpcEvents';
-import ErrorBoundary from './ErrorBoundary';
-
 import {
     useAwaiter
 } from '../utils/misc';
@@ -17,6 +13,18 @@ import {
     Switch,
     Forms
 } from '../webpack/common';
+
+import {
+    startPlugin
+} from '../plugins';
+
+import {
+    stopPlugin
+} from '../plugins/index';
+
+import Plugins from 'plugins';
+import IpcEvents from '../utils/IpcEvents';
+import ErrorBoundary from './ErrorBoundary';
 
 export default ErrorBoundary.wrap(function Settings(props) {
     const [settingsDir, , settingsDirPending] = useAwaiter(() => DeimosNative.ipc.invoke<string>(IpcEvents.GET_SETTINGS_DIR), "carregando...");
@@ -73,8 +81,22 @@ export default ErrorBoundary.wrap(function Settings(props) {
                         
                         if (v) {
                             p.dependencies?.forEach(d => {
+                                // todo: inicializar qualquer dependência
+
                                 settings.plugins[d].enabled = true;
                             });
+
+                            if (!p.started && !startPlugin(p)) {
+                                // todo: mostrar notificação
+                            }
+                        } else {
+                            if (p.started && !stopPlugin(p)) {
+                                // todo: mostrar notificação
+                            }
+                        }
+
+                        if (p.patches) {
+                            // todo: mostrar notificação
                         }
                     }}
 

@@ -7,10 +7,10 @@ import Logger from '../utils/logger';
 
 const MessageEventsLogger = new Logger("MessageEvents", "#e5c890");
 
-interface Emoji {
+export interface Emoji {
     require_colons: boolean,
     originalName: string,
-    animated: boolean
+    animated: boolean;
 
     guildId: string,
     name: string,
@@ -21,11 +21,11 @@ interface Emoji {
 interface MessageObject {
     content: string,
 
-    validNonShortcutEmojis: Emoji[]
+    validNonShortcutEmojis: Emoji[];
 }
 
-type SendListener = (channelId: string, messageObj: MessageObject, extra: any) => void;
-type EditListener = (channelId: string, messageId: string, messageObj: MessageObject) => void;
+export type SendListener = (channelId: string, messageObj: MessageObject, extra: any) => void;
+export type EditListener = (channelId: string, messageId: string, messageObj: MessageObject) => void;
 
 const sendListeners = new Set<SendListener>();
 const editListeners = new Set<EditListener>();
@@ -45,25 +45,29 @@ export function _handlePreEdit(channelId: string, messageId: string, messageObj:
         try {
             listener(channelId, messageId, messageObj);
         } catch (e) {
-            MessageEventsLogger.error(`MessageEditHandler: listener encontrou um erro desconhecido. (${e})`)
+            MessageEventsLogger.error(`MessageEditHandler: listener encontrou um erro desconhecido. (${e})`);
         }
     }
 }
 
 export function addPreSendListener(listener: SendListener) {
-    sendListeners.add(listener)
+    sendListeners.add(listener);
+
+    return listener;
 }
 
 export function addPreEditListener(listener: EditListener) {
-    editListeners.add(listener)
+    editListeners.add(listener);
+
+    return listener;
 }
 
 export function removePreSendListener(listener: SendListener) {
-    sendListeners.delete(listener)
+    return sendListeners.delete(listener);
 }
 
 export function removePreEditListener(listener: EditListener) {
-    editListeners.delete(listener)
+    return editListeners.delete(listener);
 }
 
 // cliques de mensagem
@@ -76,13 +80,15 @@ export function _handleClick(message, channel, event) {
         try {
             listener(message, channel, event);
         } catch (e) {
-            MessageEventsLogger.error(`MessageClickHandler: listener encontrou um erro desconhecido. (${e})`)
+            MessageEventsLogger.error(`MessageClickHandler: listener encontrou um erro desconhecido. (${e})`);
         }
     }
 }
 
 export function addClickListener(listener: ClickListener) {
     listeners.add(listener);
+
+    return listener;
 }
 
 export function removeClickListener(listener: ClickListener) {

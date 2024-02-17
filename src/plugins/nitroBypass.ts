@@ -1,6 +1,9 @@
 import {
     addPreSendListener,
-    addPreEditListener
+    addPreEditListener,
+    SendListener,
+    removePreSendListener,
+    removePreEditListener
 } from '../api/MessageEvents';
 
 import {
@@ -48,7 +51,7 @@ export default definePlugin({
                 delete x.guildPremiumTier
             });
 
-        addPreSendListener((_, messageObj) => {
+        this.preSend = addPreSendListener((_, messageObj) => {
             const guildId = window.location.href.split("channels/")[1].split("/")[0];
 
             for (const emoji of messageObj.validNonShortcutEmojis) {
@@ -65,7 +68,7 @@ export default definePlugin({
             }
         });
 
-        addPreEditListener((_, __, messageObj) => {
+        this.preEdit = addPreEditListener((_, __, messageObj) => {
             const guildId = window.location.href.split("channels/")[1].split("/")[0];
 
             for (const [emojiStr, _, emojiId] of messageObj.content.matchAll(/(?<!\\)<a?:(\w+):(\d+)>/ig)) {
@@ -79,5 +82,10 @@ export default definePlugin({
                 messageObj.content = messageObj.content.replace(emojiStr, ` ${url} `);
             }
         });
+    },
+
+    stop() {
+        removePreSendListener(this.preSend);
+        removePreEditListener(this.preEdit);
     }
 });

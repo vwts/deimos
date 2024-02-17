@@ -6,7 +6,8 @@ import {
 } from '../api/settings';
 
 import {
-    Patch
+    Patch,
+    Plugin
 } from '../utils/types';
 
 const logger = new Logger("PluginManager", "#a6d189");
@@ -25,13 +26,53 @@ for (const plugin of Plugins) if (plugin.patches && Settings.plugins[plugin.name
 }
 
 export function startAll() {
-    for (const plugin of plugins) if (plugin.start && Settings.plugins[plugin.name].enabled) {
-        try {
-            logger.info("inicializando plugin", plugin.name);
+    for (const plugin of plugins) if (Settings.plugins[plugin.name].enabled) {
+        startPlugin(plugin);
+    }
+}
 
-            plugin.start();
-        } catch (err) {
-            logger.error("falha ao iniciar plugin", plugin.name, err);
+export function startPlugin(p: Plugin) {
+    if (p.start) {
+        logger.info("inicializando plugin", p.name);
+
+        if (p.started) {
+            logger.warn(`${p.name} já foi inicializado`);
+
+            return false;
+        }
+
+        try {
+            p.start();
+            p.started = true;
+
+            return true;
+        } catch (err: any) {
+            logger.error(`falha ao inicializar ${p.name}\n`, err);
+
+            return false;
+        }
+    }
+}
+
+export function stopPlugin(p: Plugin) {
+    if (p.stop) {
+        logger.info("desligando plugin", p.name);
+
+        if (!p.started) {
+            logger.warn(`${p.name} já foi desligado / nunca inicializou`);
+
+            return false;
+        }
+
+        try {
+            p.stop();
+            p.started = false;
+            
+            return true;
+        } catch (err: any) {
+            logger.error(`falha ao desligar ${p.name}\n`, err);
+
+            return false;
         }
     }
 }
