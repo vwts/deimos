@@ -1,6 +1,6 @@
 import {
-    MessageClicks
-} from '../api';
+    addClickListener
+} from '../api/MessageEvents';
 
 import {
     find,
@@ -33,7 +33,7 @@ export default definePlugin({
             if (e.key === "Backspace") isDeletePressed = false;
         });
 
-        MessageClicks.addListener((msg, chan, event) => {
+        addClickListener((msg, chan, event) => {
             const isMe = msg.author.id === getCurrentUser().id;
 
             if (!isDeletePressed) {
