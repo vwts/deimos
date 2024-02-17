@@ -15,11 +15,7 @@ import {
     initIpc
 } from './ipcMain';
 
-import Logger from './utils/logger';
-
-const logger = new Logger("Patcher", "#700b90")
-
-logger.log("[deimos] inicializando...");
+console.log("[deimos] inicializando...");
 
 class BrowserWindow extends electron.BrowserWindow {
     constructor(options: BrowserWindowConstructorOptions) {
@@ -77,8 +73,8 @@ process.env.DATA_DIR = join(app.getPath("userData"), "..", "Deimos");
 
 electron.app.whenReady().then(() => {
     installExt(REACT_DEVELOPER_TOOLS)
-        .then(() => logger.log("devtools do react instalado"))
-        .catch((err) => logger.error("falha ao instalar devtools do react", err));
+        .then(() => console.info("devtools do react instalado"))
+        .catch((err) => console.error("falha ao instalar devtools do react", err));
 
     // remover csp
     electron.session.defaultSession.webRequest.onHeadersReceived(({ responseHeaders, url}, cb) => {
