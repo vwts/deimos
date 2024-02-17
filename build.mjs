@@ -61,7 +61,7 @@ const globPlugins = {
             const files = readdirSync("./src/plugins");
 
             let code = "";
-            let arr = "[";
+            let obj = "";
 
             for (let i = 0; i < files.length; i++) {
                 if (files[i] === "index.ts") {
@@ -71,10 +71,10 @@ const globPlugins = {
                 const mod = `__pluginMod${i}`;
 
                 code += `import ${mod} from "./${files[i].replace(".ts", "")}";\n`;
-                arr += `${mod},`;
+                obj += `[${mod}.name]: ${mod},`;
             }
 
-            code += `export default ${arr}]`;
+            code += `export default {${obj}}`;
 
             return {
                 contents: code,

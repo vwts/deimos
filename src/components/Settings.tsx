@@ -70,7 +70,7 @@ export default ErrorBoundary.wrap(function Settings(props) {
 
             <Forms.FormTitle tag="h5">plugins</Forms.FormTitle>
 
-            {Plugins.map(p => (
+            {Object.values(Plugins).map(p => (
                 <Switch
                     disabled={p.required === true}
                     key={p.name}
@@ -84,6 +84,12 @@ export default ErrorBoundary.wrap(function Settings(props) {
                                 // todo: inicializar qualquer dependência
 
                                 settings.plugins[d].enabled = true;
+
+                                if (!Plugins[d].started && !stopPlugin) {
+                                    // todo: mostrar notificação
+
+                                    settings.plugins[p.name].enabled = false;
+                                }
                             });
 
                             if (!p.started && !startPlugin(p)) {
