@@ -14,7 +14,7 @@ export default definePlugin({
     description: "exclusão e edição rápidas",
     author: "vuwints",
 
-    dependencies: ["MessageClicksApi"],
+    dependencies: ["MessageEventsAPI"],
 
     start() {
         const { deleteMessage, startEditMessage } = findByProps("deleteMessage");

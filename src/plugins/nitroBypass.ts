@@ -14,6 +14,8 @@ export default definePlugin({
     description: "permite compartilhamento de tela com qualidade nitro e fake emojis animados",
     author: "vuwints",
 
+    dependencies: ["MessageEventsAPI"],
+
     patches: [
         {
             find: `canUseAnimatedEmojis:function`,
