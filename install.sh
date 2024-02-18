@@ -18,19 +18,23 @@ if [ -z "$discord_actual" ]; then
     case "$(head -n1 "$discord_bin")" in
         \#!/*)
             # script wrapper, assumir que a segunda linha tenha a call do executável do electron e tentar fazer coincidir com o path do asar
-            path="$(head -n2 "$discord_bin" | tail -1 | grep -Eo "/.+?/app.asar")"
+            path="$(tail -1 "$discord_bin" | grep -Eo "\S+/app.asar" | sed 's/${name}/discord/')"
 
-            if [ -e "$path" ]; then
+            if [ -z "$path" ]; then
+                echo "instalação não-suportada. $discord_bin é um script wrapper mas a útlima linha não executa call?"
+
+                exit
+            elif [ -e "$path" ]; then
                 discord="$(dirname "$path")"
             else
-                echo "instalação não-suportada em $path"
+                echo "instalação não-suportada. $path não encontrado"
 
                 exit 1
             fi
             ;;
         
         *)
-            echo "instalação não-suportada."
+            echo "instalação não-suportada. $discord_bin não é nem um symlink e nem um script wrapper."
 
             exit 1
             ;;
@@ -52,7 +56,7 @@ if [ ! -e "$resources" ]; then
         app="$discord/app.asar"
         app_asar="_app.asar"
     else
-        echo "instalação não-suportada"
+        echo "instalação não-suportada. $discord não possui a pasta resources e também não possui o electron de sistema instalado"
 
         exit
     fi
