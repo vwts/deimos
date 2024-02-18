@@ -50,8 +50,6 @@ export default ErrorBoundary.wrap(function Settings(props) {
         return o;
     }, []);
 
-    console.log(depMap);
-
     return (
         <Forms.FormSection tag="h1" title="deimos">
             <Forms.FormText>SettingsDir: {settingsDir}</Forms.FormText>
