@@ -6,6 +6,7 @@ import {
 } from 'electron';
 
 import {
+    mkdirSync,
     readFileSync,
     watch
 } from 'fs';
@@ -26,6 +27,10 @@ const DATA_DIR = join(app.getPath("userData"), "..", "Deimos");
 const SETTINGS_DIR = join(DATA_DIR, "settings");
 const QUICKCSS_PATH = join(SETTINGS_DIR, "quickCss.css");
 const SETTINGS_FILE = join(SETTINGS_DIR, "settings.json");
+
+mkdirSync(SETTINGS_DIR, {
+    recursive: true
+});
 
 function readCss() {
     return readFile(QUICKCSS_PATH, "utf-8").catch(() => "");
