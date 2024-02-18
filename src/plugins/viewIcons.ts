@@ -9,7 +9,7 @@ const OPEN_URL = `DeimosNative.ipc.invoke("${IpcEvents.OPEN_EXTERNAL}",`;
 
 export default definePlugin({
     name: "viewicons",
-    description: "faz dos avatares/banners dos usuários, clicáveis, e adiciona entradas de menu de contexto para servidores para ver banner/ícone",
+    description: "faz dos avatares/banners dos usuários, clicáveis, e adiciona entradas de menu de contexto para servidores para ver banner/ícone. (crasha se você não possuir o modo desenvolvedor ativado, correção em breve).",
     author: "vuwints",
 
     patches: [
@@ -29,7 +29,7 @@ export default definePlugin({
             replacement: {
                 match: /style:.{1,2}\(\{\},(.{1,2}),/,
 
-                replace: (m, bannerObj) => `onClick:()=>${OPEN_URL}${bannerObj}.backgroundImage.replace("url(", "").replace(/(\\?size=.+)?\\)/, "?size=2048")),${m}`
+                replace: (m, bannerObj) => `onClick:${bannerObj}.backgroundImage&&(()=>${OPEN_URL}${bannerObj}.backgroundImage.replace("url(", "").replace(/(\\?size=.+)?\\)/, "?size=2048"))),${m}`
             }
         },
 
