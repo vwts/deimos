@@ -16,11 +16,7 @@ Object.defineProperty(window, WEBPACK_CHUNK, {
     get: () => webpackChunk,
 
     set: (v) => {
-        // dois possíveis valores para push
-        // - push nativo
-        // - push do webpack
-
-        if (v && !v.push.toString().includes("push")) {
+        if (v?.push !== Array.prototype.push) {
             logger.info(`patching ${WEBPACK_CHUNK}.push`);
 
             _initWepack(v);
@@ -55,7 +51,7 @@ function patchPush() {
 
             for (const id in modules) {
                 let mod = modules[id];
-                let code = mod.toString();
+                let code = mod.toString().replaceAll("\n", "");
 
                 const originalMod = mod;
                 const patchedBy = new Set();
