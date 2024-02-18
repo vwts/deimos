@@ -69,7 +69,7 @@ export default ErrorBoundary.wrap(function Settings(props) {
 
                 <Flex.Child>
                     <Button
-                        onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir + "/quickCss.css")}
+                        onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir, "/quickCss.css")}
                         size={ButtonProps.ButtonSizes.SMALL}
                         disabled={settingsDir === "carregando..."}
                     >
@@ -136,7 +136,7 @@ export default ErrorBoundary.wrap(function Settings(props) {
                                 "esse plugin é necessário. você não pode desabilitá-lo."
                                 : dependency
                                 ? `${humanFriendlyJoin(enableDependants)} ${enableDependants.length === 1 ? "depends" : "depend"} nesse plugin. você não pode desabilitá-lo.`
-                                : ""
+                                : null
                         }
                     >
                         {p.name}
