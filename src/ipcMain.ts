@@ -42,10 +42,18 @@ function readSettings() {
 ipcMain.handle(IpcEvents.GET_SETTINGS_DIR, () => SETTINGS_DIR);
 ipcMain.handle(IpcEvents.GET_QUICK_CSS, () => readCss());
 
-ipcMain.on(IpcEvents.GET_SETTINGS, (e) => e.returnValue = readSettings());
-ipcMain.handle(IpcEvents.SET_SETTINGS, (_, s) => void writeFile(SETTINGS_FILE, s));
 ipcMain.handle(IpcEvents.OPEN_PATH, (_, path) => shell.openPath(path));
 ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => shell.openExternal(url));
+
+// .on porque precisamos das configurações sincronizadamente (ipcrenderer.sendsync)
+ipcMain.on(IpcEvents.GET_SETTINGS, (e) => e.returnValue = readSettings());
+
+// isso é necessário porque em vez de chamar por set_settings, lidera para escritas concorrentes
+let settingsWriteQueue = Promise.resolve();
+
+ipcMain.handle(IpcEvents.SET_SETTINGS, (_, s) => {
+    settingsWriteQueue = settingsWriteQueue.then(() => writeFile(SETTINGS_FILE, s));
+});
 
 export function initIpc(mainWindow: BrowserWindow) {
     open(QUICKCSS_PATH, "a+").then(fd => {
