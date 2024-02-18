@@ -12,6 +12,7 @@ cliente discord desktop modificado
 
 ```sh
 pnpm install
+pnpm build
 
 ./install.sh
 ```
