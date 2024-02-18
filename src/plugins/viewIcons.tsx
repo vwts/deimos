@@ -2,15 +2,43 @@ import {
     REACT_GLOBAL
 } from '../utils/constants';
 
-import IpcEvents from '../utils/IpcEvents';
+import {
+    Modal,
+    openModal
+} from '../utils/modal';
+
+import {
+    filters,
+    waitFor
+} from '../webpack';
+
 import definePlugin from '../utils/types';
 
-const OPEN_URL = `DeimosNative.ipc.invoke("${IpcEvents.OPEN_EXTERNAL}",`;
+let ImageModal: any;
+let renderMaskedLink: any;
+
+waitFor(filters.byDisplayName("ImageModal"), m => ImageModal = m.default);
+waitFor("renderMaskedLinkComponent", m => renderMaskedLink = m.renderMaskedLinkComponent);
+
+const OPEN_URL = "Deimos.Plugins.plugins.ViewIcons.openImage(";
 
 export default definePlugin({
     name: "viewicons",
     description: "faz dos avatares/banners dos usuários, clicáveis, e adiciona entradas de menu de contexto para servidores para ver banner/ícone. (crasha se você não possuir o modo desenvolvedor ativado, correção em breve).",
     author: "vuwints",
+
+    openImage(url: string) {
+        openModal(() => (
+            <ImageModal
+                shouldAnimate={true}
+                original={url}
+                src={url}
+                renderLinkComponent={renderMaskedLink}
+            />
+        ), {
+            size: Modal.ModalSize.DYNAMIC
+        });
+    },
 
     patches: [
         {

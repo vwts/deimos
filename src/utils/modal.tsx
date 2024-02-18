@@ -4,8 +4,8 @@ import {
 
 import Components from 'discord-types/components';
 
-let Modal: Components.Modal;
-let modals: any;
+export let Modal: Components.Modal;
+export let modals: any;
 
 waitFor("openModalLazy", m => modals= m);
 waitFor("ModalRoot", m => Modal = m);
@@ -19,11 +19,11 @@ let modalId = 1337;
  * 
  * @returns a chave desse modal. pode ser utilizada para fechar o modal depois com closemodal
  */
-export function openModal(Component: React.ComponentType) {
+export function openModal(Component: React.ComponentType, modalProps: Record<string, any>) {
     let key = `Deimos${modalId++}`;
 
     modals.openModal(props =>
-        <Modal.ModalRoot {...props}>
+        <Modal.ModalRoot {...props} {...modalProps}>
             <Component />
         </Modal.ModalRoot>, {
             modalKey: key
