@@ -148,7 +148,7 @@ await Promise.all([
             globPlugins,
             gitHashPlugin
         ],
-        sourcemap: "inline",
+        sourcemap: false,
         watch,
         minify: false
     })

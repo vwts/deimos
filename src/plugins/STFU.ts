@@ -2,10 +2,18 @@ import definePlugin from '../utils/types';
 
 export default definePlugin({
     name: "STFU",
-    description: "aviso comprido desabilitado no console de devtools",
+    description: "desabilita o banner de 'HOLD UP' no console",
     author: "vuwints",
 
-    start() {
-        window.DiscordNative.window.setDevtoolsCallbacks(null, null);
-    }
+    patches: [
+        {
+            find: "setDevtoolsCallbacks",
+
+            replacement: {
+                match: /\.default=function.+$/s,
+
+                replace: ".default=function(){}}"
+            }
+        }
+    ]
 });
