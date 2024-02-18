@@ -150,7 +150,7 @@ await Promise.all([
         ],
         sourcemap: false,
         watch,
-        minify: false
+        minify: true
     })
 ]).then(res => {
     const took = performance.now() - begin;

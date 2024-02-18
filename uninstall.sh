@@ -7,5 +7,5 @@
 
 set -e
 
-dicksword="$(dirname "$(readlink "$(which discord)")")"
-rm -r --interactive=never "${dicksword:?não é possível encontrar discord}/resources/app"
+discord="$(dirname "$(readlink "$(which discord)")")"
+rm -r --interactive=never "${discord:?não é possível encontrar discord}/resources/app"
