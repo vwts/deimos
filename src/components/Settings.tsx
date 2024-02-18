@@ -1,4 +1,5 @@
 import {
+    humanFriendlyJoin,
     useAwaiter
 } from '../utils/misc';
 
@@ -11,7 +12,8 @@ import {
     ButtonProps,
     Flex,
     Switch,
-    Forms
+    Forms,
+    React
 } from '../webpack/common';
 
 import {
@@ -29,6 +31,26 @@ import ErrorBoundary from './ErrorBoundary';
 export default ErrorBoundary.wrap(function Settings(props) {
     const [settingsDir, , settingsDirPending] = useAwaiter(() => DeimosNative.ipc.invoke<string>(IpcEvents.GET_SETTINGS_DIR), "carregando...");
     const settings = useSettings();
+
+    const depMap = React.useMemo(() => {
+        const o = {} as Record<string, string[]>;
+
+        for (const plugin in Plugins) {
+            const deps = Plugins[plugin].dependencies;
+
+            if (deps) {
+                for (const dep of deps) {
+                    o[dep] ??= [];
+
+                    o[dep].push(plugin);
+                }
+            }
+        }
+
+        return o;
+    }, []);
+
+    console.log(depMap);
 
     return (
         <Forms.FormSection tag="h1" title="deimos">
@@ -70,48 +92,57 @@ export default ErrorBoundary.wrap(function Settings(props) {
 
             <Forms.FormTitle tag="h5">plugins</Forms.FormTitle>
 
-            {Object.values(Plugins).map(p => (
-                <Switch
-                    disabled={p.required === true}
-                    key={p.name}
-                    value={settings.plugins[p.name].enabled}
+            {Object.values(Plugins).map(p => {
+                const enableDependants = depMap[p.name]?.filter(d => settings.plugins[d].enabled);
+                const dependency = enableDependants?.length;
 
-                    onChange={v => {
-                        settings.plugins[p.name].enabled = v;
-                        
-                        if (v) {
-                            p.dependencies?.forEach(d => {
-                                // todo: inicializar qualquer dependência
+                return (
+                    <Switch
+                        disabled={p.required || dependency}
+                        key={p.name}
+                        value={settings.plugins[p.name].enabled || p.required || dependency}
 
-                                settings.plugins[d].enabled = true;
+                        onChange={v => {
+                            settings.plugins[p.name].enabled = v;
 
-                                if (!Plugins[d].started && !stopPlugin) {
+                            if (v) {
+                                p.dependencies?.forEach(d => {
+                                    settings.plugins[d].enabled = true;
+
+                                    if (!Plugins[d].started && !stopPlugin) {
+                                        // todo: mostrar notificação
+                                        settings.plugins[p.name].enabled = false;
+                                    }
+                                });
+
+                                if (!p.started && !startPlugin(p)) {
                                     // todo: mostrar notificação
-
-                                    settings.plugins[p.name].enabled = false;
                                 }
-                            });
+                            } else {
+                                if (p.started && !stopPlugin(p)) {
+                                    // todo: mostrar notificação
+                                }
+                            }
 
-                            if (!p.started && !startPlugin(p)) {
+                            if (p.patches) {
                                 // todo: mostrar notificação
                             }
-                        } else {
-                            if (p.started && !stopPlugin(p)) {
-                                // todo: mostrar notificação
-                            }
-                        }
+                        }}
 
-                        if (p.patches) {
-                            // todo: mostrar notificação
-                        }
-                    }}
+                        note={p.description}
 
-                    note={p.description}
-                    tooltipNote={p.required ? "esse plugin é necessário. você não pode desabilitar isso." : undefined}
-                >
-                    {p.name}
-                </Switch>
-            ))}
+                        tooltipNote={
+                            p.required ?
+                                "esse plugin é necessário. você não pode desabilitá-lo."
+                                : dependency
+                                ? `${humanFriendlyJoin(enableDependants)} ${enableDependants.length === 1 ? "depends" : "depend"} nesse plugin. você não pode desabilitá-lo.`
+                                : ""
+                        }
+                    >
+                        {p.name}
+                    </Switch>
+                );
+            })}
         </Forms.FormSection >
     );
 });

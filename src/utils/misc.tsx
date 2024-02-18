@@ -93,3 +93,39 @@ export function mergeDefaults<T>(obj: T, defaults: T): T {
 
     return obj;
 }
+
+/**
+ * aloca um array de strings em um jeito legível para humanos (1, 2 e 3)
+ * 
+ * @param elements elementos
+ */
+export function humanFriendlyJoin(elements: string[]): string;
+
+/**
+ * aloca um array de strings em um jeito legível para humanos (1, 2 e 3)
+ * 
+ * @param elements elementos
+ * @param mapper função que converte elementos em uma string
+ */
+export function humanFriendlyJoin<T>(elements: T[], mapper: (e: T) => string): string;
+
+export function humanFriendlyJoin(elements: any[], mapper: (e: any) => string = s => s): string {
+    const { length } = elements;
+
+    if (length === 0) return "";
+    if (length === 1) return mapper(elements[0]);
+
+    let s = "";
+
+    for (let i = 0; i < length; i++) {
+        s += mapper(elements[i]);
+
+        if (length - i > 2)
+            s += ", ";
+
+        else if (length - i > 1)
+            s += " e ";
+    }
+
+    return s;
+}
