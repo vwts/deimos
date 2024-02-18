@@ -1,11 +1,5 @@
 import definePlugin from '../utils/types';
 
-import {
-    findByProps
-} from '../webpack';
-
-const DO_NOTHING = () => void 0;
-
 export default definePlugin({
     name: "NoTrack",
     description: "desabilita todos os tracks e reports de crash do discord",
@@ -13,27 +7,25 @@ export default definePlugin({
     
     required: true,
 
-    start() {
-        findByProps("getSuperPropertiesBase64", "track").track = DO_NOTHING;
-        findByProps("submitLiveCrashReport").submitLiveCrashReport = DO_NOTHING;
-        findByProps("AnalyticsActionHandlers").AnalyticsActionHandlers.handleTrack = DO_NOTHING;
+    patches: [
+        {
+            find: "TRACKING_URL:",
 
-        const sentry = window.__SENTRY__;
+            replacement: {
+                match: /=\(0,.\.analyticsTrackingStoreMaker\)/,
 
-        sentry.logger.disable();
+                replace: "=(function(){})"
+            }
+        },
 
-        sentry.hub.addBreadcrumb = DO_NOTHING;
-        sentry.hub.getClient().close(0);
-        sentry.hub.getScope().clear();
+        {
+            find: "window.DiscordSentry=",
 
-        const c = console;
+            replacement: {
+                match: /window\.DiscordSentry=\(0,.\.initSentry\)\(\)/,
 
-        for (const method in c) {
-            if (c[method].__sentry_original__)
-                c[method] = c[method].__sentry_original__;
-
-            if (c[method].__REACT_DEVTOOLS_ORIGINAL_METHOD__?.__sentry_original__)
-            c[method].__REACT_DEVTOOLS_ORIGINAL_METHOD__ = c[method].__REACT_DEVTOOLS_ORIGINAL_METHOD__.__sentry_original__;
+                replace: ""
+            }
         }
-    }
+    ]
 });
