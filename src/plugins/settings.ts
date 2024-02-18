@@ -21,7 +21,7 @@ export default definePlugin({
             },
 
             {
-                match: /\w\.createElement.+?["']Host ["'].+?\):null/,
+                match: /\w\.createElement.+?["']Host ["'].+?\):null/s,
 
                 replace: m => {
                     const idx = m.indexOf("Host") - 1;
