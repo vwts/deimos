@@ -119,10 +119,16 @@ function patchPush() {
                                     const newMod = (0, eval)(`// módulo webpack ${id} - patched por ${[...patchedBy].join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${id}`);
 
                                     code = newCode;
-                                    mod = newMod;
+                                    mod = (0, eval)(`// módulo webpack ${id} - patched por ${[...patchedBy].join(", ")}\n${newCode}\n//# sourceURL=WebpackModule${id}`);
                                 }
                             } catch (err) {
+                                // todo - erros mais significativos
+
+                                // diff
                                 logger.error("falha ao aplicar patch do", patch.plugin, err);
+
+                                logger.debug("fonte original\n", lastCode);
+                                logger.debug("fonte patched\n", code);
 
                                 code = lastCode;
                                 mod = lastMod;
