@@ -50,6 +50,8 @@ export default ErrorBoundary.wrap(function Settings(props) {
         return o;
     }, []);
 
+    const sortedPlugins = React.useMemo(() => Object.values(Plugins).sort((a, b) => a.name.localeCompare(b.name)), []);
+
     return (
         <Forms.FormSection tag="h1" title="deimos">
             <Forms.FormText>SettingsDir: {settingsDir}</Forms.FormText>
@@ -79,18 +81,26 @@ export default ErrorBoundary.wrap(function Settings(props) {
             <Forms.FormTitle tag="h5">configurações</Forms.FormTitle>
 
             <Switch
+                value={settings.useQuickCss}
+                onChange={v => settings.useQuickCss = v}
+                note="habilitar quickcss"
+            >
+                usar quickcss
+            </Switch>
+
+            <Switch
                 value={settings.unsafeRequire}
                 onChange={v => settings.unsafeRequire = v}
                 note="habilita deimosnative.require. útil para testes, muito ruim para segurança."
             >
-                habilitar ensafe require
+                habilitar unsafe require
             </Switch>
             
             <Forms.FormDivider />
 
             <Forms.FormTitle tag="h5">plugins</Forms.FormTitle>
 
-            {Object.values(Plugins).map(p => {
+            {sortedPlugins.map(p => {
                 const enableDependants = depMap[p.name]?.filter(d => settings.plugins[d].enabled);
                 const dependency = enableDependants?.length;
 
