@@ -82,6 +82,10 @@ electron.app.whenReady().then(() => {
         if (responseHeaders) {
             delete responseHeaders["content-security-policy-report-only"];
             delete responseHeaders["content-security-policy"];
+
+			// correção de hosts que não setam o tipo de conteúdo apropriadamente
+			if (url.endsWith(".css"))
+				responseHeaders["content-type"] = ["text/css"];
         }
 
         cb({
