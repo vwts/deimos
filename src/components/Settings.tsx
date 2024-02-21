@@ -9,8 +9,6 @@ import {
 
 import {
     Button,
-    ButtonProps,
-    Flex,
     Switch,
     Forms,
     React
@@ -23,6 +21,10 @@ import {
 import {
     stopPlugin
 } from '../plugins/index';
+
+import {
+	Flex
+} from './Flex';
 
 import Plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
@@ -57,25 +59,21 @@ export default ErrorBoundary.wrap(function Settings(props) {
             <Forms.FormText>SettingsDir: {settingsDir}</Forms.FormText>
 
             <Flex style={{ marginTop: "8px", marginBottom: "8px" }}>
-                <Flex.Child>
-                    <Button
-                        onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir)}
-                        size={ButtonProps.ButtonSizes.SMALL}
-                        disabled={settingsDirPending}
-                    >
-                        executar diretório
-                    </Button>
-                </Flex.Child>
+				<Button
+                    onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir)}
+                    size={Button.Sizes.SMALL}
+                    disabled={settingsDirPending}
+                >
+                    executar diretório
+                </Button>
 
-                <Flex.Child>
-                    <Button
-                        onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir, "/quickCss.css")}
-                        size={ButtonProps.ButtonSizes.SMALL}
-                        disabled={settingsDir === "carregando..."}
-                    >
-                        abrir arquivo quickcss
-                    </Button>
-                </Flex.Child>
+                <Button
+                    onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir, "quickCss.css")}
+                    size={Button.Sizes.SMALL}
+                    disabled={settingsDir === "carregando..."}
+                >
+                    abrir arquivo quickcss
+                </Button>
             </Flex>
 
             <Forms.FormTitle tag="h5">configurações</Forms.FormTitle>
@@ -95,7 +93,7 @@ export default ErrorBoundary.wrap(function Settings(props) {
             >
                 habilitar unsafe require
             </Switch>
-            
+
             <Forms.FormDivider />
 
             <Forms.FormTitle tag="h5">plugins</Forms.FormTitle>

@@ -12,7 +12,20 @@ export const filters = {
         ? m => m[props[0]] !== void 0
         : m => props.every(p => m[p] !== void 0),
 
-    byDisplayName: (deezNuts: string): FilterFn => m => m.default?.displayName === deezNuts
+	byDisplayName: (deezNuts: string): FilterFn => m => m.default?.displayName === deezNuts,
+
+	byCode: (...code: string[]): FilterFn => m => {
+		if (typeof m !== 'function')
+			return false;
+
+		const s = Function.prototype.toString.call(m);
+
+		for (const c of code) {
+			if (!s.includes(c)) return false;
+		}
+
+		return true;
+	}
 };
 
 export const subscriptions = new Map<FilterFn, CallbackFn>();
