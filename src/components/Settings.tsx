@@ -24,11 +24,6 @@ import {
     stopPlugin
 } from '../plugins/index';
 
-import {
-    openModal,
-    closeModal
-} from '../utils/modal';
-
 import Plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
 import ErrorBoundary from './ErrorBoundary';

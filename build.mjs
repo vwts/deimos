@@ -17,13 +17,7 @@ import {
 /**
  * @type {esbuild.WatchMode|false}
  */
-const watch = process.argv.includes("--watch") ? {
-    onRebuild: (err) => {
-        if (err) console.error("erro de build", err.message);
-
-        else console.log("reconstruído!");
-    }
-} : false;
+const watch = process.argv.includes("--watch");
 
 // https://github.com/evanw/esbuild/issues/619#issuecomment-751995294
 
@@ -107,10 +101,9 @@ const gitHashPlugin = {
     }
 };
 
-const begin = performance.now();
-
 await Promise.all([
     esbuild.build({
+        logLevel: "info",
         entryPoints: ["src/preload.ts"],
         outfile: "dist/preload.js",
         format: "cjs",
@@ -123,6 +116,7 @@ await Promise.all([
     }),
 
     esbuild.build({
+        logLevel: "info",
         entryPoints: ["src/patcher.ts"],
         outfile: "dist/patcher.js",
         bundle: true,
@@ -136,6 +130,7 @@ await Promise.all([
     }),
 
     esbuild.build({
+        logLevel: "info",
         entryPoints: ["src/Deimos.ts"],
         outfile: "dist/renderer.js",
         format: "iife",
@@ -152,14 +147,8 @@ await Promise.all([
         watch,
         minify: true
     })
-]).then(res => {
-    const took = performance.now() - begin;
-
-    console.log(`construído em ${took.toFixed(2)}ms`);
-}).catch(err => {
+]).catch(err => {
     console.error("construção falhou");
 
     console.error(err.message);
 });
-
-if (watch) console.log("observando...");
