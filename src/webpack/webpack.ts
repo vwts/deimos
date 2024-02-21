@@ -101,3 +101,60 @@ export function addListener(callback: CallbackFn) {
 export function removeListener(callback: CallbackFn) {
     listeners.delete(callback);
 }
+
+/**
+ * pesquisa módulos pela palavra-chave
+ * 
+ * isso busca os métodos factory, significando que você pode pesquisar
+ * por todos os tipos de coisas, displayname, methodname, strings, etc
+ * 
+ * @param filters uma ou mais strings ou regexes
+ * 
+ * @returns mapeamento dos módulos encontrados
+ */
+export function search(...filters: Array<string | RegExp>) {
+    const results = {} as Record<number, Function>;
+    const factories = wreq.m;
+
+    outer:
+
+    for (const id in factories) {
+        const factory = factories[id];
+        const str: string = factory.toString();
+
+        for (const filter of filters) {
+            if (typeof filter === 'string' && !str.includes(filter))
+                continue outer;
+
+            if (filter instanceof RegExp && !filter.test(str))
+                continue outer;
+        }
+
+        results[id] = factory;
+    }
+
+    return results;
+}
+
+/**
+ * extrai um módulo específico
+ */
+export function extract(id: number) {
+    const mod = wreq.m[id] as Function;
+
+    if (!mod)
+        return null;
+
+    const code = `
+// [extraído] WebpackModule${id}
+// aviso: esse módulo foi extraído para ter uma leitura facilitada.
+//        esse módulo não é utilizável!
+
+${mod.toString()}
+//# sourceURL=ExtractedWebpackModule${id}
+`;
+    
+    const extracted = (0, eval)(code);
+
+    return extracted as Function;
+}
