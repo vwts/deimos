@@ -33,20 +33,30 @@ export function _initWebpack(instance: typeof window.webpackChunkdiscord_app) {
 export function find(filter: FilterFn, getDefault = true) {
     if (typeof filter !== 'function')
         throw new Error("filtro inválido. função got esperada", filter);
-    
+
     for (const key in cache) {
         const mod = cache[key];
 
-        if (mod?.exports && filter(mod.exports))
+        if (!mod?.exports)
+			continue;
+
+        if (filter(mod.exports))
             return mod.exports;
 
-        if (mod?.exports?.default && filter(mod.exports.default))
-            return getDefault ? mod.exports.default : mod.exports;
+		if (mod.exports.default && filter(mod.exports.default))
+			return getDefault ? mod.exports.default : mod.exports;
+
+		for (const nestedMod in mod.exports) {
+            const nested = mod.exports[nestedMod];
+
+            if (nested && filter(nested)) return nested;
+        }
     }
 
     return null;
 }
 
+// todo corrigir
 export function findAll(filter: FilterFn, getDefault = true) {
     if (typeof filter !== 'function')
         throw new Error("filtro inválido. função got esperada", filter);
@@ -58,7 +68,7 @@ export function findAll(filter: FilterFn, getDefault = true) {
 
         if (mod?.exports && filter(mod.exports))
             ret.push(mod.exports);
-        
+
         if (mod?.exports?.default && filter(mod.exports.default))
             ret.push(getDefault ? mod.exports.default : mod.exports);
     }
@@ -104,12 +114,12 @@ export function removeListener(callback: CallbackFn) {
 
 /**
  * pesquisa módulos pela palavra-chave
- * 
+ *
  * isso busca os métodos factory, significando que você pode pesquisar
  * por todos os tipos de coisas, displayname, methodname, strings, etc
- * 
+ *
  * @param filters uma ou mais strings ou regexes
- * 
+ *
  * @returns mapeamento dos módulos encontrados
  */
 export function search(...filters: Array<string | RegExp>) {
@@ -153,7 +163,7 @@ export function extract(id: number) {
 ${mod.toString()}
 //# sourceURL=ExtractedWebpackModule${id}
 `;
-    
+
     const extracted = (0, eval)(code);
 
     return extracted as Function;

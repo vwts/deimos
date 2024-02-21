@@ -9,21 +9,17 @@ export default definePlugin({
         {
             find: '.displayName="SpotifyStore"',
 
-            replacement: {
-                match: /\.isPremium=.;/,
+			replacement: [
+				{
+					match: /\.isPremium=.;/,
 
-                replace: ".isPremium=true;"
-            }
-        },
+					replace: ".isPremium=true;"
+				}, ...["SPEAKING", "VOICE_STATE_UPDATES", "MEDIA_ENGINE_SET_DESKTOP_SOURCE"].map(event => ({
+					match: new RegExp(`${event}:function\\(.\\){.+?}(,|}\\))`),
 
-        {
-            find: '.displayName="SpotifyStore"',
-
-            replacement: ["SPEAKING", "VOICE_STATE_UPDATES", "MEDIA_ENGINE_SET_DESKTOP_SOURCE"].map(event => ({
-                match: new RegExp(`${event}:function\\(.\\){.+?}(,|}\\))`),
-
-                replace: (_, ending) => `${event}:function(){}${ending}`
-            }))
-        }
+					replace: (_, ending) => `${event}:function(){}${ending}`
+				}))
+			]
+		}
     ]
 });

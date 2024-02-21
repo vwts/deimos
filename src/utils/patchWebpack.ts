@@ -44,7 +44,7 @@ function patchPush() {
                 subscriptions,
                 listeners
             } = Deimos.Webpack;
-            
+
             const {
                 patches
             } = Deimos.Plugins;
@@ -82,10 +82,12 @@ function patchPush() {
                                 subscriptions.delete(filter);
 
                                 callback(exports);
-                            } else if (exports.default && filter(exports.default)) {
-                                subscriptions.delete(filter);
+                            } else for (const nested in exports) {
+                                if (exports[nested] && filter(exports[nested])) {
+                                    subscriptions.delete(filter);
 
-                                callback(exports.default);
+                                    callback(exports[nested]);
+                                }
                             }
                         } catch (err) {
                             logger.error("erro ao tentar chamar pelo callback para o chunk do webpack", err);

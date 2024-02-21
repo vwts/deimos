@@ -4,7 +4,7 @@ export default definePlugin({
     name: "NoTrack",
     description: "desabilita todos os tracks e reports de crash do discord",
     author: "vuwints",
-    
+
     required: true,
 
     patches: [
@@ -12,9 +12,9 @@ export default definePlugin({
             find: "TRACKING_URL:",
 
             replacement: {
-                match: /=\(0,.\.analyticsTrackingStoreMaker\)/,
+                match: /^.+$/,
 
-                replace: "=(function(){})"
+                replace: "()=>{}"
             }
         },
 
@@ -22,7 +22,7 @@ export default definePlugin({
             find: "window.DiscordSentry=",
 
             replacement: {
-                match: /window\.DiscordSentry=\(0,.\.initSentry\)\(\)/,
+                match: /window\.DiscordSentry=function.+}\(\)/,
 
                 replace: ""
             }

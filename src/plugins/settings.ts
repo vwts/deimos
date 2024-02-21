@@ -9,37 +9,29 @@ export default definePlugin({
     required: true,
 
     patches: [{
-        find: "default.versionHash",
+        find: "().versionHash",
 
         replacement: [
             {
-                match: /return .{1,2}\("div"/,
-                
-                replace: (m) => {
-                    return `var versions=DeimosNative.getVersions();${m}`;
-                }
-            },
-
-            {
-                match: /\w\.createElement.+?["']Host ["'].+?\):null/,
+                match: /\w\.createElement\(.{1,2}.Fragment,.{0,30}\{[^}]+\},"Host ".+?\):null/,
 
                 replace: m => {
                     const idx = m.indexOf("Host") - 1;
-                    const template = m.slice(0, idx);
+					const template = m.slice(0, idx);
 
-                    return `${m}, ${template}"Deimos ", "${gitHash}"), " "), ` +
-                        `${template} "Electron ", versions.electron), " "), ` +
-                        `${template} "Chrome ", versions.chrome), " ")`;
+					return `${m}, ${template}"Deimos ", "${gitHash}"), " "), ` +
+						`${template} "Electron ",DeimosNative.getVersions().electron)," "), ` +
+						`${template} "Chrome ",DeimosNative.getVersions().chrome)," ")`;
                 }
-            }
-        ]
+            },
+		]
     }, {
         find: "Messages.ACTIVITY_SETTINGS",
 
         replacement: {
-            match: /\{section:(.{1,2})\.SectionTypes\.HEADER,\s*label:(.{1,2})\.default\.Messages\.ACTIVITY_SETTINGS\}/,
+            match: /\{section:(.{1,2})\.ID\.HEADER,\s*label:(.{1,2})\..{1,2}\.Messages\.ACTIVITY_SETTINGS\}/,
 
-            replace: (m, mod) => `{section:${mod}.SectionTypes.HEADER,label:"Deimos"},` + `{section:"Deimos",label:"Deimos",element:Deimos.Components.Settings},` + `{section:${mod}.SectionTypes.DIVIDER},${m}`
+            replace: (m, mod) => `{section:${mod}.ID.HEADER,label:"Deimos"},` + `{section:"Deimos",label:"Deimos",element:Deimos.Components.Settings},` + `{section:${mod}.ID.DIVIDER},${m}`
         }
     }]
 });

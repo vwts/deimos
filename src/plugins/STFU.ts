@@ -10,9 +10,9 @@ export default definePlugin({
             find: "setDevtoolsCallbacks",
 
             replacement: {
-                match: /\.default=function.+$/,
+                match: /\.setDevtoolsCallbacks\(.+?else/,
 
-                replace: ".default=function(){}}"
+                replace: ".setDevtoolsCallbacks(null,null);else"
             }
         }
     ]
