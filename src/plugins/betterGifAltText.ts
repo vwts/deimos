@@ -31,16 +31,23 @@ export default definePlugin({
 		if (props.alt !== "GIF")
 			return;
 
-		const url = props.original || props.src;
+		const url: string = props.original || props.src;
 
-		const name = url
+		let name = url
 			.slice(url.lastIndexOf("/") + 1)
 
 			.replace(/\d/g, "") // strip números
 			.replace(/.gif$/, "") // strip extensão
-			.replace(/[,-_ ]+/g, " "); // substitui os delimitadores padrões com espaço
 
-		if (name.length)
+			.split(/[,\-_ ]+/g)
+            .slice(0, 20)
+            .join(" ");
+
+		if (name.length > 300) {
+			name = name.slice(0, 300) + "...";
+		}
+
+		if (name)
 			props.alt += ` - ${name}`;
 
 		return props.alt;
