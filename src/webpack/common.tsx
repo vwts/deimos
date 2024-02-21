@@ -18,11 +18,57 @@ export let React: typeof import('react');
 
 export let UserStore: Stores.UserStore;
 
-export let Forms: any = {};
+export const Forms: any = {};
 export let Button: any;
 export let Switch: any;
 
 export let Tooltip: Components.Tooltip;
+
+const ToastType = {
+	MESSAGE: 0,
+	SUCCESS: 1,
+	FAILURE: 2,
+	CUSTOM: 3
+};
+
+const ToastPosition = {
+	TOP: 0,
+
+	BOTTOM: 1
+};
+
+export const Toasts = {
+	Type: ToastType,
+	Position: ToastPosition,
+
+	genId: () => (Math.random() || Math.random()).toString(36).slice(2)
+} as {
+	Type: typeof ToastType,
+	Position: typeof ToastPosition,
+
+	genId(): string;
+
+	show(data: {
+		message: string,
+		id: string,
+
+		/**
+		 * tipo de toasts
+		 */
+		type: number,
+
+		options?: {
+			/**
+			 * toasts.position
+			 */
+			position?: number;
+			component?: React.ReactNode,
+			duration?: number;
+		};
+	}): void;
+
+	pop(): void;
+};
 
 waitFor("useState", m => React = m);
 
@@ -57,3 +103,7 @@ waitFor(m => {
 
     return s.length < 200 && s.includes("divider");
 }, m => Forms.FormDivider = m);
+
+// esse é o mesmo módulo
+waitFor(filters.byCode("currentToast?"), m => Toasts.show = m);
+waitFor(filters.byCode("currentToast:null"), m => Toasts.pop = m);
