@@ -56,13 +56,17 @@ export function find(filter: FilterFn, getDefault = true) {
         if (filter(mod.exports))
             return mod.exports;
 
+		if (typeof mod.exports !== 'object')
+			continue;
+
 		if (mod.exports.default && filter(mod.exports.default))
 			return getDefault ? mod.exports.default : mod.exports;
 
-		for (const nestedMod in mod.exports) {
+		for (const nestedMod in mod.exports) if (nestedMod.length < 3) {
             const nested = mod.exports[nestedMod];
 
-            if (nested && filter(nested)) return nested;
+            if (nested && filter(nested))
+				return nested;
         }
     }
 
