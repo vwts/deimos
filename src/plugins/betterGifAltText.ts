@@ -31,7 +31,11 @@ export default definePlugin({
 		if (props.alt !== "GIF")
 			return;
 
-		const url: string = props.original || props.src;
+		let url: string = props.original || props.src;
+
+		try {
+			url = decodeURI(url);
+		} catch {};
 
 		let name = url
 			.slice(url.lastIndexOf("/") + 1)
