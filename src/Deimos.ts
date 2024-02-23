@@ -1,6 +1,8 @@
 export * as Plugins from './plugins';
 export * as Webpack from './webpack';
 export * as Api from './api';
+export * as Updater from './utils/updater';
+export * as QuickCss from './utils/quickCss';
 
 import {
 	popNotice,
