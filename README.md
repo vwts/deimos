@@ -24,3 +24,9 @@ pnpm build
 as builds agora estão na pasta dist/ (deimos/dist).
 
 agora instale com o script powershell/bash
+
+## contribuindo
+
+[contribua]: CONTRIBUTING.md
+
+[contribua] [contribua] [contribua] [contribua] [contribua]
