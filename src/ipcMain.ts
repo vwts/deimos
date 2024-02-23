@@ -126,7 +126,7 @@ ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => shell.openExternal(url));
 ipcMain.handle(IpcEvents.GET_UPDATES, serializeErrors(async () => {
 	await git("fetch");
 
-	const res = await git("log", `HEAD...origin/main`, "--pretty=format:%an-%h-%s");
+	const res = await git("log", `HEAD...origin/main`, "--pretty=format:%an/%h/%s");
 
 	const commits = res.stdout.trim();
 
