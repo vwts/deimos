@@ -22,7 +22,7 @@ export default definePlugin({
 	],
 
 	copyToClipboard(color: string) {
-		DiscordNative.clipboard.copy(color);
+		window.DiscordNative.clipboard.copy(color);
 
 		Toasts.show({
 			message: "copiado para área de transferência!",

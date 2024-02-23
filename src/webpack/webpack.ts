@@ -2,6 +2,13 @@ import type {
     WebpackInstance
 } from 'discord-types/other';
 
+export let _resolveReady: () => void;
+
+/**
+ * indica que os módulos do webpack core já foram inicializados
+ */
+export const onceReady = new Promise<void>(r => _resolveReady = r);
+
 export let wreq: WebpackInstance;
 export let cache: WebpackInstance["c"];
 
@@ -83,11 +90,24 @@ export function findAll(filter: FilterFn, getDefault = true) {
     for (const key in cache) {
         const mod = cache[key];
 
-        if (mod?.exports && filter(mod.exports))
-            ret.push(mod.exports);
+        if (!mod?.exports)
+			continue;
 
-        if (mod?.exports?.default && filter(mod.exports.default))
-            ret.push(getDefault ? mod.exports.default : mod.exports);
+			if (filter(mod.exports))
+				ret.push(mod.exports);
+			
+			else if (typeof mod.exports !== "object")
+				continue;
+
+			if (mod.exports.default && filter(mod.exports.default))
+				ret.push(getDefault ? mod.exports.default : mod.exports);
+
+			else for (const nestedMod in mod.exports) if (nestedMod.length < 3) {
+				const nested = mod.exports[nestedMod];
+
+            if (nested && filter(nested))
+				ret.push(nested);
+        }
     }
 
     return ret;

@@ -25,7 +25,7 @@ for (const plugin of Object.values(Plugins)) if (plugin.patches && Settings.plug
     }
 }
 
-export function startAll() {
+export function startAllPlugins() {
     for (const plugin in Plugins) if (Settings.plugins[plugin].enabled) {
         startPlugin(Plugins[plugin]);
     }
@@ -67,7 +67,7 @@ export function stopPlugin(p: Plugin) {
         try {
             p.stop();
             p.started = false;
-            
+
             return true;
         } catch (err: any) {
             logger.error(`falha ao desligar ${p.name}\n`, err);

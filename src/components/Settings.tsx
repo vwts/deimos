@@ -1,5 +1,7 @@
 import {
+	classes,
     humanFriendlyJoin,
+	lazy,
     useAwaiter
 } from '../utils/misc';
 
@@ -11,7 +13,8 @@ import {
     Button,
     Switch,
     Forms,
-    React
+    React,
+	Margins
 } from '../webpack/common';
 
 import {
@@ -26,12 +29,22 @@ import {
 	Flex
 } from './Flex';
 
+import {
+	isOutdated
+} from '../utils/updater';
+
+import {
+	Updater
+} from './Updater';
+
 import Plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
 import ErrorBoundary from './ErrorBoundary';
 
 export default ErrorBoundary.wrap(function Settings(props) {
     const [settingsDir, , settingsDirPending] = useAwaiter(() => DeimosNative.ipc.invoke<string>(IpcEvents.GET_SETTINGS_DIR), "carregando...");
+
+	const [outdated, setOutdated] = React.useState(isOutdated);
     const settings = useSettings();
 
     const depMap = React.useMemo(() => {
@@ -56,9 +69,25 @@ export default ErrorBoundary.wrap(function Settings(props) {
 
     return (
         <Forms.FormSection tag="h1" title="deimos">
-            <Forms.FormText>SettingsDir: {settingsDir}</Forms.FormText>
+            {outdated && (
+				<>
+					<Forms.FormTitle tag="h5">updater</Forms.FormTitle>
 
-            <Flex style={{ marginTop: "8px", marginBottom: "8px" }}>
+					<Updater setIsOutdated={setOutdated} />
+				</>
+			)}
+
+			<Forms.FormDivider />
+
+			<Forms.FormTitle tag="h5" className={outdated ? `${Margins.marginTop20} ${Margins.marginBottom8}` : ""}>
+				configurações
+			<Forms.FormTitle/>
+
+			<Forms.FormText>
+				SettingsDir: {settingsDir}
+			</Forms.FormText>
+
+			<Flex className={classes(Margins.marginBottom20)}>
 				<Button
                     onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir)}
                     size={Button.Sizes.SMALL}
@@ -76,8 +105,6 @@ export default ErrorBoundary.wrap(function Settings(props) {
                 </Button>
             </Flex>
 
-            <Forms.FormTitle tag="h5">configurações</Forms.FormTitle>
-
             <Switch
                 value={settings.useQuickCss}
                 onChange={v => settings.useQuickCss = v}
@@ -85,6 +112,14 @@ export default ErrorBoundary.wrap(function Settings(props) {
             >
                 usar quickcss
             </Switch>
+
+			<Switch
+				value={settings.notifyAboutUpdates}
+				onChange={v => settings.notifyAboutUpdates = v}
+				note="mostra um toast na inicialização"
+			>
+				notificado quando novas atualizações forem lançadas
+			</Switch>
 
             <Switch
                 value={settings.unsafeRequire}
@@ -96,7 +131,9 @@ export default ErrorBoundary.wrap(function Settings(props) {
 
             <Forms.FormDivider />
 
-            <Forms.FormTitle tag="h5">plugins</Forms.FormTitle>
+			<Forms.FormTitle tag="h5" className={classes(Margins.marginTop20, Margins.marginBottom8)}>
+				plugins
+			</Forms.FormTitle>
 
             {sortedPlugins.map(p => {
                 const enableDependants = depMap[p.name]?.filter(d => settings.plugins[d].enabled);

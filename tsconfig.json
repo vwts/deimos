@@ -11,6 +11,7 @@
 
         // https://esbuild.github.io/api/#jsx-factory
         "jsxFactory": "Deimos.Webpack.Common.React.createElement",
+		"jsxFragmentFactory": "Deimos.Webpack.Common.React.Fragment",
         "jsx": "react"
     },
 

@@ -10,6 +10,7 @@ import {
 } from '../utils/misc';
 
 interface Settings {
+	notifyAboutUpdates: boolean;
     unsafeRequire: boolean;
     useQuickCss: boolean;
 
@@ -23,11 +24,12 @@ interface Settings {
 }
 
 const DefaultSettings: Settings = {
+	notifyAboutUpdates: true,
     unsafeRequire: false,
     useQuickCss: true,
 
     plugins: {}
-} as any;
+};
 
 for (const plugin in plugins) {
     DefaultSettings.plugins[plugin] = {
@@ -70,7 +72,7 @@ function makeProxy(settings: Settings, root = settings, path = ""): Settings {
             if (target[p] === v) return true;
 
             target[p] = v;
-            
+
             const setPath = `${path}${path && "."}${p}`;
 
             for (const subscription of subscriptions) {
@@ -96,7 +98,7 @@ export const Settings = makeProxy(settings);
  * hook de configurações para componentes react.
  */
 export function useSettings() {
-    const [, forceUpdate] = React.useReducer(x => ({}), {});
+    const [, forceUpdate] = React.useReducer(() => ({}), {});
 
     React.useEffect(() => {
         subscriptions.add(forceUpdate);
@@ -115,10 +117,10 @@ type ResolvePropDeep<T, P> = P extends "" ? T :
 
 /**
  * adiciona um ouvinte de configurações que será invocado sempre que a configuração desejada for atualizada
- * 
+ *
  * @param path caminho para a configuração que você deseja assistir
  * @param onUpdate função callback sempre que um caminho que coincida for atualizado
- * 
+ *
  * @example addSettingsListener("", (newValue, path) => console.log(`${path} is now ${newValue}`))
  *          addSettingsListener("plugins.Unindent.enabled", v => console.log("unindent é agora", v ? "enabled" : "disabled"))
  */

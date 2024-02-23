@@ -34,3 +34,11 @@ interface PluginDef {
     dependencies?: string[],
     required?: boolean;
 }
+
+export type IpcRes<V = any> = {
+	ok: true;
+	value: V;
+} | {
+	ok: false;
+	error: any;
+};

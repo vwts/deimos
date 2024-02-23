@@ -1,6 +1,7 @@
 import Logger from '../utils/logger';
 
 import {
+	Card,
     React
 } from '../webpack/common';
 
@@ -19,7 +20,7 @@ export default class ErrorBoundary extends React.Component<React.PropsWithChildr
     static wrap<T = any>(Component: React.ComponentType<T>): (props: T) => React.ReactElement {
         return (props) => (
             <ErrorBoundary>
-                <Component {...props} />
+                <Component {...props as any} />
             </ErrorBoundary>
         );
     }
@@ -52,7 +53,7 @@ export default class ErrorBoundary extends React.Component<React.PropsWithChildr
             />;
 
         return (
-            <div style={{
+            <Card style={{
                 overflow: "hidden",
                 padding: "2em",
                 backgroundColor: color + "30",
@@ -68,7 +69,7 @@ export default class ErrorBoundary extends React.Component<React.PropsWithChildr
                 <code>
                     <pre>{this.state.error}</pre>
                 </code>
-            </div>
+            </Card>
         );
     }
 }
