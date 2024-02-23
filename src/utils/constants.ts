@@ -5,7 +5,7 @@ export const REACT_GLOBAL = "Deimos.Webpack.Common.React";
 // (caso tenha desenvolvido mais de um plugin)
 export const Devs = Object.freeze({
 	Vuw: {
-		name: "Vuwints",
+		name: "vuwints",
 		id: 671809749955641364
 	}
 });
