@@ -11,6 +11,7 @@ import {
 import {
     app,
     BrowserWindow,
+	desktopCapturer,
     ipcMain,
     shell
 } from 'electron';
@@ -117,6 +118,7 @@ function serializeErrors(func: (...args: any[]) => any) {
 	};
 }
 
+ipcMain.handle(IpcEvents.GET_DESKTOP_CAPTURE_SOURCES, (_, opts) => desktopCapturer.getSources(opts));
 ipcMain.handle(IpcEvents.GET_SETTINGS_DIR, () => SETTINGS_DIR);
 ipcMain.handle(IpcEvents.GET_QUICK_CSS, () => readCss());
 
