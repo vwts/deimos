@@ -1,15 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
-	name: "ícone svg de pastas",
+	name: "plainfoldericon",
 	description: "não mostra os ícones dos servidores dentro de suas pastas",
 
-	authors: [
-		{
-			name: "vuwints",
-			id: 671809749955641364
-		}
-	],
+	authors: [Devs.Vuw],
 
 	patches: [
 		{
