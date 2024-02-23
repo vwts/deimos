@@ -1,9 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
 	name: "bettergifalttext",
 	description: "altera o texto alt de um gif",
-	author: "vuwints",
+
+	authors: [Devs.Vuw],
 
 	patches: [
 		{

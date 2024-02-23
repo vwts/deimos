@@ -52,7 +52,7 @@ export function _initWebpack(instance: typeof window.webpackChunkdiscord_app) {
 
 export function find(filter: FilterFn, getDefault = true) {
     if (typeof filter !== 'function')
-        throw new Error("filtro inválido. função got esperada", filter);
+        throw new Error("filtro inválido. função got esperada " + typeof filter);
 
     for (const key in cache) {
         const mod = cache[key];
@@ -83,7 +83,7 @@ export function find(filter: FilterFn, getDefault = true) {
 // todo corrigir
 export function findAll(filter: FilterFn, getDefault = true) {
     if (typeof filter !== 'function')
-        throw new Error("filtro inválido. função got esperada", filter);
+        throw new Error("filtro inválido. função got esperada " + typeof filter);
 
     const ret = [] as any[];
 
@@ -95,7 +95,7 @@ export function findAll(filter: FilterFn, getDefault = true) {
 
 			if (filter(mod.exports))
 				ret.push(mod.exports);
-			
+
 			else if (typeof mod.exports !== "object")
 				continue;
 
@@ -131,7 +131,7 @@ export function waitFor(filter: string | string[] | FilterFn, callback: Callback
     else if (Array.isArray(filter))
         filter = filters.byProps(filter);
     else if (typeof filter !== "function")
-        throw new Error("filter deve ser uma string, string[] ou função", filter);
+        throw new Error("filter deve ser uma string, string[] ou função, obteve-se " + typeof filter);
 
     const existing = find(filter!);
 

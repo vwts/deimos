@@ -3,7 +3,13 @@ import definePlugin from '../utils/types';
 export default definePlugin({
     name: "banger",
     description: "substitui o gif do diálogo de ban para um customizado",
-    author: "vuwints",
+
+    authors: [
+		{
+			name: "vuwints",
+			id: 671809749955641364
+		}
+	],
 
     patches: [
         {

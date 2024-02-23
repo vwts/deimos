@@ -1,3 +1,7 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import IpcEvents from '../utils/IpcEvents';
 import definePlugin from '../utils/types';
 
@@ -6,7 +10,8 @@ const OPEN_URL = "Deimos.Plugins.plugins.ViewIcons.openImage(";
 export default definePlugin({
     name: "viewicons",
     description: "faz dos avatares/banners dos usuários, clicáveis, e adiciona entradas de menu de contexto para servidores para ver banner/ícone.",
-    author: "vuwints",
+
+    authors: [Devs.Vuw],
 
     openImage(url: string) {
         DeimosNative.ipc.invoke(IpcEvents.OPEN_EXTERNAL, url);

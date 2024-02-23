@@ -1,9 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
     name: "ify",
     description: "desabilita auto-pausa e checks de premium do spotify",
-    author: "vuwints",
+
+    authors: [Devs.Vuw],
 
     patches: [
         {

@@ -10,12 +10,17 @@ import {
     findByProps
 } from '../webpack';
 
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
     name: "nitro bypass",
     description: "permite compartilhamento de tela com qualidade nitro e fake emojis animados",
-    author: "vuwints",
+
+	authors: [Devs.Vuw],
 
     dependencies: ["MessageEventsAPI"],
 

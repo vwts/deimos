@@ -1,9 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
 	name: "silenttyping",
 	description: "oculta que você está digitando",
-	author: "vuwints",
+
+	authors: [Devs.Vuw],
 
 	patches: [
 		{

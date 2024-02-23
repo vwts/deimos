@@ -4,6 +4,10 @@ import {
 } from '../api/MessageEvents';
 
 import {
+	Devs
+} from '../utils/constants';
+
+import {
     find,
     findByProps
 } from '../webpack';
@@ -22,7 +26,8 @@ const keyup = (e: KeyboardEvent) => e.key === "Backspace" && (isDeletePressed = 
 export default definePlugin({
     name: "MessageQuickActions",
     description: "exclusão e edição rápidas",
-    author: "vuwints",
+
+    author: [Devs.Vuw],
 
     dependencies: ["MessageEventsAPI"],
 

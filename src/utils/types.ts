@@ -15,6 +15,12 @@ export interface Patch {
     find: string, replacement: PatchReplacement | PatchReplacement[];
 }
 
+export interface PluginAuthor {
+	name: string;
+
+	id: BigInt;
+}
+
 export interface Plugin extends PluginDef {
     patches?: Patch[];
 
@@ -24,7 +30,7 @@ export interface Plugin extends PluginDef {
 interface PluginDef {
     name: string;
     description: string;
-    author: string;
+    authors: PluginAuthor[];
 
     start?(): void;
     stop?(): void;

@@ -1,9 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
 	name: "apinotices",
 	description: "corrige atualização automática das notícias",
-	author: "vuwints",
+
+	authors: [Devs.Vuw],
 
 	required: true,
 

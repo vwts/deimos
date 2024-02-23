@@ -1,3 +1,7 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 import gitHash from 'git-hash';
@@ -5,7 +9,9 @@ import gitHash from 'git-hash';
 export default definePlugin({
     name: "Settings",
     description: "adiciona ui de configurações e info de debug",
-    author: "vuwints",
+
+    authors: [Devs.Vuw],
+
     required: true,
 
     patches: [{

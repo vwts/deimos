@@ -1,9 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
     name: "MessageEventAPI",
     description: "api necessária para qualquer coisa que utilize eventos de mensagem.",
-    author: "vuwints",
+
+    authors: [Devs.Vuw],
 
     patches: [
         {

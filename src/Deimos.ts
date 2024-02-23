@@ -1,18 +1,65 @@
-export {
-    Settings
-} from './api/settings';
-
 export * as Plugins from './plugins';
 export * as Webpack from './webpack';
 export * as Api from './api';
 
-import './utils/patchWebpack';
-import './utils/quickCss';
+import {
+	popNotice,
+	showNotice
+} from './api/Notices';
 
 import {
-    waitFor
+	Settings
+} from './api/settings';
+
+import {
+	startAllPlugins
+} from './plugins';
+
+export { Settings };
+
+import {
+	checkForUpdates,
+	UpdateLogger
+} from './utils/updater';
+
+import {
+	onceReady
 } from './webpack';
 
-export let Components;
+import {
+	Router
+} from './webpack/common';
 
-waitFor("useState", () => setTimeout(() => import('./components').then(mod => Components = mod), 0));
+import './webpack/patchWebpack';
+import './utils/quickCss';
+
+async function init() {
+	await onceReady;
+
+	startAllPlugins();
+
+	Components = await import('./components');
+
+	try {
+		const isOutdated = await checkForUpdates();
+
+		if (isOutdated && Settings.notifyAboutUpdates)
+			setTimeout(() => {
+				showNotice(
+					"uma atualização deimos está disponível!",
+
+					"ver atualização",
+
+					() => {
+						popNotice();
+
+						Router.open("Deimos");
+					}
+				);
+			}, 10000);
+	} catch (err) {
+		UpdateLogger.error("erro ao checar por atualizações", err);
+	}
+}
+
+init();
