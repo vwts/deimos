@@ -166,7 +166,7 @@ export function search(...filters: Array<string | RegExp>) {
     outer:
 
     for (const id in factories) {
-        const factory = factories[id];
+        const factory = factories[id].original ?? factories[id];
         const str: string = factory.toString();
 
         for (const filter of filters) {

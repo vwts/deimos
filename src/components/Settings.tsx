@@ -110,10 +110,21 @@ export default ErrorBoundary.wrap(function Settings() {
 			<Forms.FormTitle/>
 
 			<Forms.FormText>
-				SettingsDir: {settingsDir}
+				SettingsDir: <code style={{ userSelect: 'text', cursor: 'text' }}>
+					{settingsDir}
+				</code>
 			</Forms.FormText>
 
 			<Flex className={classes(Margins.marginBottom20)}>
+				<Button
+					onClick={() => location.reload()}
+
+					size={Button.Sizes.SMALL}
+					color={Button.Colors.GREEN}
+				>
+					recarregar
+				</Button>
+
 				<Button
                     onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir)}
                     size={Button.Sizes.SMALL}
@@ -131,9 +142,15 @@ export default ErrorBoundary.wrap(function Settings() {
                 </Button>
             </Flex>
 
+			<Forms.FormDivider />
+
+			<Forms.FormTitle tag="h5">
+				configurações
+			</Forms.FormTitle>
+
             <Switch
                 value={settings.useQuickCss}
-                onChange={v => settings.useQuickCss = v}
+                onChange={(v: boolean) => settings.useQuickCss = v}
                 note="habilitar quickcss"
             >
                 usar quickcss
@@ -141,7 +158,7 @@ export default ErrorBoundary.wrap(function Settings() {
 
 			<Switch
 				value={settings.notifyAboutUpdates}
-				onChange={v => settings.notifyAboutUpdates = v}
+				onChange={(v: boolean) => settings.notifyAboutUpdates = v}
 				note="mostra um toast na inicialização"
 			>
 				notificado quando novas atualizações forem lançadas
@@ -149,7 +166,7 @@ export default ErrorBoundary.wrap(function Settings() {
 
             <Switch
                 value={settings.unsafeRequire}
-                onChange={v => settings.unsafeRequire = v}
+                onChange={(v: boolean) => settings.unsafeRequire = v}
                 note="habilita deimosnative.require. útil para testes, muito ruim para segurança."
             >
                 habilitar unsafe require
