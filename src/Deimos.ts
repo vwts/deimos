@@ -55,7 +55,7 @@ async function init() {
 					() => {
 						popNotice();
 
-						Router.open("Deimos");
+						Router.open("DeimosUpdater");
 					}
 				);
 			}, 10000);

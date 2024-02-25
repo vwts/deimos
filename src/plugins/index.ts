@@ -32,47 +32,49 @@ export function startAllPlugins() {
 }
 
 export function startPlugin(p: Plugin) {
-    if (p.start) {
-        logger.info("inicializando plugin", p.name);
+    if (!p.start)
+		return true;
 
-        if (p.started) {
-            logger.warn(`${p.name} já foi inicializado`);
+	logger.info("inicializando plugin", p.name);
 
-            return false;
-        }
+	if (p.started) {
+		logger.warn(`${p.name} já foi inicializado`);
 
-        try {
-            p.start();
-            p.started = true;
+		return false;
+	}
 
-            return true;
-        } catch (err: any) {
-            logger.error(`falha ao inicializar ${p.name}\n`, err);
+	try {
+		p.start();
+		p.started = true;
 
-            return false;
-        }
-    }
+		return true;
+	} catch (err: any) {
+		logger.error(`falha ao inicializar ${p.name}\n`, err);
+
+		return false;
+	}
 }
 
 export function stopPlugin(p: Plugin) {
-    if (p.stop) {
-        logger.info("desligando plugin", p.name);
+    if (!p.stop)
+		return true;
 
-        if (!p.started) {
-            logger.warn(`${p.name} já foi desligado / nunca inicializou`);
+	logger.info("encerrando plugin", p.name);
 
-            return false;
-        }
+	if (!p.started) {
+		logger.warn(`${p.name} já foi encerrado / nunca inicializou`);
 
-        try {
-            p.stop();
-            p.started = false;
+		return false;
+	}
 
-            return true;
-        } catch (err: any) {
-            logger.error(`falha ao desligar ${p.name}\n`, err);
+	try {
+		p.stop();
+		p.started = false;
 
-            return false;
-        }
-    }
+		return true;
+	} catch (err: any) {
+		logger.error(`falha ao encerrar ${p.name}\n`, err);
+
+		return false;
+	}
 }

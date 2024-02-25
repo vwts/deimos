@@ -25,5 +25,6 @@ export default strEnum({
     GET_REPO: "DeimosGetRepo",
     GET_HASHES: "DeimosGetHashes",
     UPDATE: "DeimosUpdate",
-    BUILD: "DeimosBuild"
+    BUILD: "DeimosBuild",
+	GET_DESKTOP_CAPTURE_SOURCES: "DeimosGetDesktopCaptureSources"
 } as const);

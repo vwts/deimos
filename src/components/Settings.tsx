@@ -1,7 +1,6 @@
 import {
 	classes,
     humanFriendlyJoin,
-	lazy,
     useAwaiter
 } from '../utils/misc';
 
@@ -14,7 +13,10 @@ import {
     Switch,
     Forms,
     React,
-	Margins
+	Margins,
+    Toasts,
+    Alerts,
+    Parser
 } from '../webpack/common';
 
 import {
@@ -30,22 +32,56 @@ import {
 } from './Flex';
 
 import {
-	isOutdated
-} from '../utils/updater';
-
-import {
-	Updater
-} from './Updater';
+    ChangeList
+} from '../utils/ChangeList';
 
 import Plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
 import ErrorBoundary from './ErrorBoundary';
 
-export default ErrorBoundary.wrap(function Settings(props) {
+function showErrorToast(message: string) {
+    Toasts.show({
+        message,
+
+        type: Toasts.Type.FAILURE,
+        id: Toasts.genId(),
+
+        options: {
+            position: Toasts.Position.BOTTOM
+        }
+    });
+}
+
+export default ErrorBoundary.wrap(function Settings() {
     const [settingsDir, , settingsDirPending] = useAwaiter(() => DeimosNative.ipc.invoke<string>(IpcEvents.GET_SETTINGS_DIR), "carregando...");
 
-	const [outdated, setOutdated] = React.useState(isOutdated);
     const settings = useSettings();
+    const changes = React.useMemo(() => new ChangeList<string>, []);
+
+    React.useEffect(() => {
+        return () => void (changes.hasChanges && Alerts.show({
+            title: "reinicialização necessária",
+
+            body: (
+                <>
+                    <p>os seguintes plugins necessitam de uma reinicialização:</p>
+
+                    <div>{changes.map((s, i) => (
+                        <>
+                            {i > 0 && ", "}
+
+                            {Parser.parse('`' + s + '`')}
+                        </>
+                    ))}</div>
+                </>
+            ),
+
+            confirmText: "reiniciar agora",
+            cancelText: "depois!",
+
+            onConfirm: () => location.reload()
+        }));
+    }, []);
 
     const depMap = React.useMemo(() => {
         const o = {} as Record<string, string[]>;
@@ -69,17 +105,7 @@ export default ErrorBoundary.wrap(function Settings(props) {
 
     return (
         <Forms.FormSection tag="h1" title="deimos">
-            {outdated && (
-				<>
-					<Forms.FormTitle tag="h5">updater</Forms.FormTitle>
-
-					<Updater setIsOutdated={setOutdated} />
-				</>
-			)}
-
-			<Forms.FormDivider />
-
-			<Forms.FormTitle tag="h5" className={outdated ? `${Margins.marginTop20} ${Margins.marginBottom8}` : ""}>
+			<Forms.FormTitle tag="h5">
 				configurações
 			<Forms.FormTitle/>
 
@@ -153,22 +179,23 @@ export default ErrorBoundary.wrap(function Settings(props) {
                                     settings.plugins[d].enabled = true;
 
                                     if (!Plugins[d].started && !stopPlugin) {
-                                        // todo: mostrar notificação
                                         settings.plugins[p.name].enabled = false;
+
+                                        showErrorToast(`falha ao iniciar a dependência ${d}. veja o console para mais informações.`);
                                     }
                                 });
 
                                 if (!p.started && !startPlugin(p)) {
-                                    // todo: mostrar notificação
+                                    showErrorToast(`falha ao iniciar a dependência ${p.name}. veja o console para mais informações.`);
                                 }
                             } else {
                                 if (p.started && !stopPlugin(p)) {
-                                    // todo: mostrar notificação
+                                    showErrorToast(`falha ao iniciar a dependência ${p.name}. veja o console para mais informações.`);
                                 }
                             }
 
                             if (p.patches) {
-                                // todo: mostrar notificação
+                                changes.handleChange(p.name);
                             }
                         }}
 

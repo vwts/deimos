@@ -14,7 +14,8 @@ import {
 	Margins,
 	Alerts,
 	Card,
-	Parser
+	Parser,
+	Toasts
 } from '../webpack/common';
 
 import {
@@ -30,10 +31,7 @@ import {
 } from './Link';
 
 import gitHash from 'git-hash';
-
-interface Props {
-	setIsOutdated(b: boolean): void;
-}
+import ErrorBoundary from './ErrorBoundary';
 
 function withDispatcher(dispatcher: React.Dispatch<React.SetStateAction<boolean>>, action: () => any) {
 	return async () => {
@@ -74,7 +72,7 @@ function withDispatcher(dispatcher: React.Dispatch<React.SetStateAction<boolean>
 	};
 };
 
-export function Updater(p: Props) {
+export default ErrorBoundary.wrap(function Updater() {
 	const [repo, err, repoPending] = useAwaiter(getRepo, "carregando...");
 
     const [isChecking, setIsChecking] = React.useState(false);
@@ -87,57 +85,64 @@ export function Updater(p: Props) {
 			UpdateLogger.error("falha ao recuperar repositório", err);
 	}, [err]);
 
+	const isOutdated = updates.length > 0;
+
 	return (
-		<>
-			<Forms.FormText>repo: {repoPending ? repo : err ? "falha ao recuperar - veja o console" : (
+		<Forms.FormSection tag="h1" title="updater do deimos">
+			<Forms.FormTitle tag="h5">repo</Forms.FormTitle>
+
+			<Forms.FormText>{repoPending ? repo : err ? "falha ao recuperar - veja o console" : (
 				<Link href={repo}>
 					{repo.split("/").slice(-2).join("/")}
 				</Link>
 			)} ({gitHash})</Forms.FormText>
 
+			<Forms.FormDivider />
+
+			<Forms.FormTitle tag="h5">atualizações</Forms.FormTitle>
+
 			<Forms.FormText className={Margins.marginBottom8}>
-				há {updates.length} atualizações disponíveis
+				{updates.length ? `aqui estão ${updates.length} atualizações` : "atualizado!"}
 			</Forms.FormText>
 
-			<Card style={{ padding: ".5em" }}>
-				{updates.map(({ hash, author, message }) => (
-					<div>
-						<Link href={`${repo}/commit/${hash}`} disabled={repoPending}>
-							<code>{hash}</code>
-						</Link>
+			{updates.length > 0 && (
+				<Card style={{ pending: ".5em" }}>
+					{updates.map(({ hash, author, message }) => (
+						<div>
+							<Link href={`${repo}/commit/${hash}`} disabled={repoPending}>
+								<code>{hash}</code>
+							</Link>
 
-						<span style={{
-							marginLeft: "0.5em",
-							color: "var(--text-normal)"
-						}}>{message} - {author}</span>
-					</div>
-				))}
-			</Card>
+							<span style={{
+								marginLeft: "0.5em",
+
+								color: "var(--text-normal)"
+							}}>{message} - {author}</span>
+						</div>
+					))}
+				</Card>
+			)}
 
 			<Flex className={`${Margins.marginBottom8} ${Margins.marginTop8}`}>
-				<Button
+				{isOutdated && <Button
 					size={Button.Sizes.SMALL}
 					disabled={isUpdating || isChecking}
 
 					onClick={withDispatcher(setIsUpdating, async () => {
 						if (await update()) {
-							p.setIsOutdated(false);
-
 							const needFullRestart = await rebuild();
 
 							await new Promise<void>(r => {
 								Alerts.show({
-									title: "atualizado com sucesso!",
-
+									title: "sucesso com atualização!",
 									body: "atualizado com sucesso. reiniciar agora para aplicar as mudanças?",
 
 									confirmText: "reiniciar",
-									cancelText: "agora não",
+									cancelText: "não agora!",
 
 									onConfirm() {
 										if (needFullRestart)
 											window.DiscordNative.app.relaunch();
-
 										else
 											location.reload();
 
@@ -150,26 +155,35 @@ export function Updater(p: Props) {
 						}
 					})}
 				>
-					atualizar
-				</Button>
+					atualizar agora
+				</Button>}
 
 				<Button
 					size={Button.Sizes.SMALL}
 					disabled={isUpdating || isChecking}
 
 					onClick={withDispatcher(setIsChecking, async () => {
-						const res = await checkForUpdates();
+						const outdated = await checkForUpdates();
 
-						if (res) {
+						if (outdated) {
 							setUpdates(changes);
 						} else {
-							p.setIsOutdated(false);
+							Toasts.show({
+								message: "nenhuma atualização encontrada!",
+
+								id: Toasts.genId(),
+								type: Toasts.Type.MESSAGE,
+
+								options: {
+									position: Toasts.Position.BOTTOM
+								}
+							});
 						}
 					})}
 				>
-					refresh
+					verificar atualizações
 				</Button>
 			</Flex>
-		</>
+		</Forms.FormSection>
 	);
-}
+});
