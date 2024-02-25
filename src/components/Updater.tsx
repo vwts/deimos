@@ -130,6 +130,8 @@ export default ErrorBoundary.wrap(function Updater() {
 
 					onClick={withDispatcher(setIsUpdating, async () => {
 						if (await update()) {
+							setUpdates([]);
+
 							const needFullRestart = await rebuild();
 
 							await new Promise<void>(r => {
@@ -168,6 +170,8 @@ export default ErrorBoundary.wrap(function Updater() {
 						if (outdated) {
 							setUpdates(changes);
 						} else {
+							setUpdates([]);
+							
 							Toasts.show({
 								message: "nenhuma atualização encontrada!",
 
