@@ -7,7 +7,7 @@ export default definePlugin({
     authors: [
 		{
 			name: "vuwints",
-			id: 671809749955641364
+			id: 671809749955641364n
 		}
 	],
 
