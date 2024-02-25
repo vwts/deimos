@@ -117,20 +117,21 @@ export default ErrorBoundary.wrap(function Settings() {
 
 			<Flex className={classes(Margins.marginBottom20)}>
 				<Button
-					onClick={() => location.reload()}
+                    onClick={() => window.DiscordNative.app.relaunch()}
 
 					size={Button.Sizes.SMALL}
 					color={Button.Colors.GREEN}
-				>
+                >
 					recarregar
-				</Button>
+                </Button>
 
 				<Button
-                    onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir)}
-                    size={Button.Sizes.SMALL}
-                    disabled={settingsDirPending}
+                    onClick={() => window.DiscordNative.fileManager.showItemInFolder(settingsDir)}
+
+					size={Button.Sizes.SMALL}
+					disabled={settingsDirPending}
                 >
-                    executar diretório
+					executar diretório
                 </Button>
 
                 <Button
