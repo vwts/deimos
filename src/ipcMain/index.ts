@@ -52,8 +52,21 @@ function readSettings() {
 
 // correção para o screensharing no electron >= 17
 ipcMain.handle(IpcEvents.GET_DESKTOP_CAPTURE_SOURCES, (_, opts) => desktopCapturer.getSources(opts));
-ipcMain.handle(IpcEvents.OPEN_PATH, (_, ...pathElements) => shell.openPath(join(...pathElements)));
-ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => shell.openExternal(url));
+
+ipcMain.handle(IpcEvents.OPEN_QUIKCSS, () => shell.openPath(QUICKCSS_PATH));
+
+ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => {
+	try {
+		var { protocol } = new URL(url);
+	} catch {
+		throw "url mal-estruturado";
+	}
+
+	if (protocol !== "https:" && protocol !== "http:")
+		throw "protocolo não-permitido.";
+
+	shell.openExternal(url);
+});
 
 ipcMain.handle(IpcEvents.GET_QUICK_CSS, () => readCss());
 

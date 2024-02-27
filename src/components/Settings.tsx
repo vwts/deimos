@@ -135,7 +135,7 @@ export default ErrorBoundary.wrap(function Settings() {
                 </Button>
 
                 <Button
-                    onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_PATH, settingsDir, "quickCss.css")}
+                    onClick={() => DeimosNative.ipc.invoke(IpcEvents.OPEN_QUICKCSS)}
                     size={Button.Sizes.SMALL}
                     disabled={settingsDir === "carregando..."}
                 >
