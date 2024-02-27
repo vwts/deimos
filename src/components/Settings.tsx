@@ -184,27 +184,31 @@ export default ErrorBoundary.wrap(function Settings() {
                         onChange={v => {
                             settings.plugins[p.name].enabled = v;
 
+							let needsRestart = Boolean(p.patches?.length);
+
                             if (v) {
                                 p.dependencies?.forEach(d => {
+									const dep = Plugins[d];
+
+									needsRestart ||= Boolean(dep.patches?.length && !settings.plugins[d].enabled);
+
                                     settings.plugins[d].enabled = true;
 
-                                    if (!Plugins[d].started && !stopPlugin) {
-                                        settings.plugins[p.name].enabled = false;
-
+                                    if (!needsRestart && !dep.started && !startPlugin(dep)) {
                                         showErrorToast(`falha ao iniciar a dependência ${d}. veja o console para mais informações.`);
                                     }
                                 });
 
-                                if (!p.started && !startPlugin(p)) {
+                                if (!needsRestart && !p.started && !startPlugin(p)) {
                                     showErrorToast(`falha ao iniciar a dependência ${p.name}. veja o console para mais informações.`);
                                 }
                             } else {
-                                if (p.started && !stopPlugin(p)) {
+                                if ((p.started || !p.start && p.commands?.length) && !stopPlugin(p)) {
                                     showErrorToast(`falha ao iniciar a dependência ${p.name}. veja o console para mais informações.`);
                                 }
                             }
 
-                            if (p.patches) {
+                            if (needsRestart) {
                                 changes.handleChange(p.name);
                             }
                         }}

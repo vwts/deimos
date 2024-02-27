@@ -2,6 +2,11 @@ import Plugins from 'plugins';
 import Logger from '../utils/logger';
 
 import {
+	registerCommand,
+	unregisterCommand
+} from '../api/Commands';
+
+import {
     Settings
 } from '../api/settings';
 
@@ -26,55 +31,83 @@ for (const plugin of Object.values(Plugins)) if (plugin.patches && Settings.plug
 }
 
 export function startAllPlugins() {
-    for (const plugin in Plugins) if (Settings.plugins[plugin].enabled) {
-        startPlugin(Plugins[plugin]);
+    for (const name in Plugins) if (Settings.plugins[name].enabled) {
+        startPlugin(Plugins[name]);
     }
 }
 
 export function startPlugin(p: Plugin) {
-    if (!p.start)
-		return true;
+    if (p.start) {
+		logger.info("inicializando plugin", p.name);
 
-	logger.info("inicializando plugin", p.name);
+		if (p.started) {
+			logger.warn(`${p.name} já foi inicializado`);
 
-	if (p.started) {
-		logger.warn(`${p.name} já foi inicializado`);
+			return false;
+		}
 
-		return false;
+		try {
+			p.start();
+
+			p.started = true;
+		} catch (err: any) {
+			logger.error(`falha ao inicializar ${p.name}\n`, err);
+
+			return false;
+		}
 	}
 
-	try {
-		p.start();
-		p.started = true;
+	if (p.commands?.length) {
+        logger.info("registrando comandos do plugin", p.name);
 
-		return true;
-	} catch (err: any) {
-		logger.error(`falha ao inicializar ${p.name}\n`, err);
+        for (const cmd of p.commands) {
+            try {
+                registerCommand(cmd, p.name);
+            } catch (e) {
+                logger.error(`falha ao registrar o comando ${cmd.name}\n`, e);
 
-		return false;
-	}
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 export function stopPlugin(p: Plugin) {
-    if (!p.stop)
-		return true;
+    if (p.stop) {
+		logger.info("encerrando plugin", p.name);
 
-	logger.info("encerrando plugin", p.name);
+		if (!p.started) {
+			logger.warn(`${p.name} já foi encerrado`);
 
-	if (!p.started) {
-		logger.warn(`${p.name} já foi encerrado / nunca inicializou`);
+			return false;
+		}
 
-		return false;
+		try {
+			p.stop();
+
+			p.started = false;
+		} catch (e) {
+			logger.error(`falha ao encerrar ${p.name}\n`, e);
+
+			return false;
+		}
 	}
 
-	try {
-		p.stop();
-		p.started = false;
+	if (p.commands?.length) {
+        logger.info("desfazendo os registros de comandos do plugin", p.name);
 
-		return true;
-	} catch (err: any) {
-		logger.error(`falha ao encerrar ${p.name}\n`, err);
+        for (const cmd of p.commands) {
+            try {
+                unregisterCommand(cmd.name);
+            } catch (e) {
+                logger.error(`falha ao desfazer o registro do comando ${cmd.name}\n`, e);
 
-		return false;
-	}
+                return false;
+            }
+        }
+    }
+
+    return true;
 }

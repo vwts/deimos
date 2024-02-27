@@ -93,7 +93,7 @@ export default definePlugin({
                 const url = emoji.url.replace(/\?size=[0-9]+/, `?size=48`);
 
                 messageObj.content = messageObj.content.replace(emojiString, (match, offset, origStr) => {
-                    return `${getWordBoundary(origStr, offset-1)}${url}${getWordBoundary(origStr, offset+match.length)}`;
+                    return `${getWordBoundary(origStr, offset - 1)}${url}${getWordBoundary(origStr, offset + match.length)}`;
                 });
             }
         });
@@ -113,7 +113,7 @@ export default definePlugin({
                 const url = emoji.url.replace(/\?size=[0-9]+/, `?size=48`);
 
                 messageObj.content = messageObj.content.replace(emojiStr, (match, offset, origStr) => {
-                    return `${getWordBoundary(origStr, offset-1)}${url}${getWordBoundary(origStr, offset+match.length)}`;
+                    return `${getWordBoundary(origStr, offset - 1)}${url}${getWordBoundary(origStr, offset + match.length)}`;
                 });
             }
         });
