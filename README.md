@@ -5,25 +5,55 @@ cliente discord desktop modificado
 ## recursos
 
 - funciona na última atualização swc do discord que quebrava todos os outros mods
-- isolation de contextos proper -> funciona nas versões mais novas do electron (funcionamento confirmado nas versões 13-21)
-- patches inline: patch os códigos do discord com substituições regex. veja [o plugin experiments](src/plugins/experiments.ts) para exemplos.
+- suporte para navegadores (experimental): rode o deimos no seu navegador em vez de rodá-lo no app desktop
+- css customizado e temas: manualmente edite `%appdata%/Deimos/settings/quickCss.css` / `~/.config/Deimos/settings/quickCss.css` com o seu editor favorito e o client irá automaticamente aplicar suas mudanças. para importar os temas do betterdiscord, apenas adicione `@import url(theUrl)` no topo desse arquivo. (certifique-se de que o url seja um url cru do github ou similar e contenha apenas texto plano)
+- diversos plugins úteis - [lista](https://github.com/vwts/Deimos/tree/main/src/plugins)
 - experiments
-- css customizado: manualmente edite `%appdata%/Deimos/settings/quickCss.css` / `~/.config/Deimos/settings/quickCss.css` com seu editor favorito e o cliente irá aplicar as mudanças automaticamente
-- diversos plugins úteis - [lista](https://github.com/vwts/deimos/tree/main/src/plugins)
+- isolação de contexto -> funciona nas versões mais novas do electron (funcionamento confirmado nas versões 13 ~ 21)
 
 ## instalação
 
-certifique-se de ter o node.js e o git instalados. o exemplo abaixo utiliza o pnpm, porém você pode utilizar o npm em vez disso.
+se você não consegue seguir as instruções, utilize algum outro client de discord alternativo, como o betterdiscord.
+
+instale [node.js](https://nodejs.org/en/download) e o [git](https://git-scm.com/download)
+
+abra um terminal e rode os seguintes comandos. (se algum deles derem erro, você não instalou o node.js e o git apropriadamente.)
+
+> aviso: no windows, NÃO rode o terminal como administrador. se você executá-lo e no path diz: system32, você iniciou como administrador.
 
 ```sh
+npm i -g pnpm
 git clone https://github.com/vwts/deimos
 cd Deimos
+pnpm i
 pnpm build
 ```
 
-as builds agora estão na pasta dist/ (deimos/dist).
+não fechar o terminal ainda.
 
-agora instale com o script powershell/bash
+para corrigir o deimos no seu client discord, rode o seguinte comando e siga o prompt interativo.
+
+```sh
+pnpm patch
+```
+
+agora feche totalmente o discord. inicie e confirme que o deimos esteja instalado com sucesso checando se você tem a nova sessão deimos nas configurações.
+
+se você sempre precisar voltar para a pasta deimos, apenas abra um novo terminal e escreva `cd Deimos`
+
+todos os plugins são desativados por padrão, então o primeiro passo será abrir as configurações e habilitar os plugins que desejar.
+
+comando para unpatch: `pnpm unpatch`
+
+## instalação (navegador)
+
+rode os mesmos comandos como o da instalação padrão. agora rode
+
+```sh
+pnpm buildWeb
+```
+
+você irá encontrar a extensão built em `dist/extension.zip`. agora instale essa extensão no seu navegador.
 
 ## contribuindo
 
