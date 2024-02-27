@@ -18,6 +18,8 @@ export default definePlugin({
 
     authors: [Devs.Vuw],
 
+	dependencies: ["MessageEventsAPI"],
+
     patches: [
         {
             find: "inQuote:",
