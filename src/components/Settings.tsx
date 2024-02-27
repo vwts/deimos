@@ -35,6 +35,10 @@ import {
     ChangeList
 } from '../utils/ChangeList';
 
+import {
+	IS_WEB
+} from '../utils/isWeb';
+
 import Plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
 import ErrorBoundary from './ErrorBoundary';
@@ -115,7 +119,7 @@ export default ErrorBoundary.wrap(function Settings() {
 				</code>
 			</Forms.FormText>
 
-			<Flex className={classes(Margins.marginBottom20)}>
+			{!IS_WEB && <Flex className={classes(Margins.marginBottom20)}>
 				<Button
                     onClick={() => window.DiscordNative.app.relaunch()}
 
@@ -141,7 +145,7 @@ export default ErrorBoundary.wrap(function Settings() {
                 >
                     abrir arquivo quickcss
                 </Button>
-            </Flex>
+            </Flex>}
 
 			<Forms.FormDivider />
 
@@ -157,21 +161,21 @@ export default ErrorBoundary.wrap(function Settings() {
                 usar quickcss
             </Switch>
 
-			<Switch
+			{!IS_WEB && <Switch
 				value={settings.notifyAboutUpdates}
 				onChange={(v: boolean) => settings.notifyAboutUpdates = v}
 				note="mostra um toast na inicialização"
 			>
 				notificado quando novas atualizações forem lançadas
-			</Switch>
+			</Switch>}
 
-            <Switch
+            {!IS_WEB && <Switch
                 value={settings.unsafeRequire}
                 onChange={(v: boolean) => settings.unsafeRequire = v}
                 note="habilita deimosnative.require. útil para testes, muito ruim para segurança."
             >
                 habilitar unsafe require
-            </Switch>
+            </Switch>}
 
             <Forms.FormDivider />
 

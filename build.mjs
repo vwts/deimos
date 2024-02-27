@@ -10,10 +10,6 @@ import {
     readdirSync
 } from 'fs';
 
-import {
-    performance
-} from 'perf_hooks';
-
 /**
  * @type {esbuild.WatchMode|false}
  */

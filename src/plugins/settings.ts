@@ -2,8 +2,11 @@ import {
 	Devs
 } from '../utils/constants';
 
-import definePlugin from '../utils/types';
+import {
+	IS_WEB
+} from '../utils/isWeb';
 
+import definePlugin from '../utils/types';
 import gitHash from 'git-hash';
 
 export default definePlugin({
@@ -25,11 +28,16 @@ export default definePlugin({
                     const idx = m.indexOf("Host") - 1;
 					const template = m.slice(0, idx);
 
-					return `${m}, ${template}"Deimos ", "${gitHash}"), " "), ` +
-						`${template} "Electron ",DeimosNative.getVersions().electron)," "), ` +
-						`${template} "Chrome ",DeimosNative.getVersions().chrome)," ")`;
+					let r = `${m}, ${template}"Deimos ", "${gitHash}${IS_WEB ? " (Web)" : ""}"), " ")`;
+
+					if (!IS_WEB) {
+						r += `,${template} "Electron ",DeimosNative.getVersions().electron)," "),`;
+                        r += `${template} "Chrome ",DeimosNative.getVersions().chrome)," ")`;
+					}
+
+					return r;
                 }
-            },
+            }
 		]
     }, {
         find: "Messages.ACTIVITY_SETTINGS",
@@ -37,7 +45,7 @@ export default definePlugin({
         replacement: {
             match: /\{section:(.{1,2})\.ID\.HEADER,\s*label:(.{1,2})\..{1,2}\.Messages\.ACTIVITY_SETTINGS\}/,
 
-            replace: (m, mod) => `{section:${mod}.ID.HEADER,label:"deimos"},` + `{section:"DeimosSetting",label:"deimos",element:Deimos.Components.Settings},` + `{section:"DeimosUpdater",label:"updater",element:Deimos.Components.Updater},` + `{section:${mod}.ID.DIVIDER},${m}`
+            replace: (m, mod) => `{section:${mod}.ID.HEADER,label:"deimos"},` + `{section:"DeimosSetting",label:"deimos",element:Deimos.Components.Settings},` + `{section:"DeimosUpdater",label:"updater",element:Deimos.Components.Updater,predicate:()=>!IS_WEB},` + `{section:${mod}.ID.DIVIDER},${m}`
         }
     }]
 });

@@ -39,6 +39,8 @@ interface PluginDef {
 
     dependencies?: string[],
     required?: boolean;
+
+	target?: "WEB" | "DESKTOP" | "BOTH";
 }
 
 export type IpcRes<V = any> = {

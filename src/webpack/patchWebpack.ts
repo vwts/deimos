@@ -12,6 +12,8 @@ let webpackChunk: any[];
 
 const logger = new Logger("WebpackInterceptor", "#8caaee");
 
+console.log("pré-patch é", window[WEBPACK_CHUNK]);
+
 Object.defineProperty(window, WEBPACK_CHUNK, {
 	get: () => webpackChunk,
 

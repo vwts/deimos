@@ -20,7 +20,7 @@ export default strEnum({
     GET_SETTINGS: "DeimosGetSettings",
     SET_SETTINGS: "DeimosSetSettings",
     OPEN_EXTERNAL: "DeimosOpenExternal",
-    OPEN_PATH: "DeimosOpenPath",
+    OPEN_QUICKCSS: "DeimosOpenQuickCss",
 	GET_UPDATES: "DeimosGetUpdates",
     GET_REPO: "DeimosGetRepo",
     GET_HASHES: "DeimosGetHashes",

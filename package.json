@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+	"buildWeb": "node buildWeb.mjs",
     "build": "node build.mjs",
     "watch": "node build.mjs --watch"
   },
@@ -17,7 +18,9 @@
   "devDependencies": {
     "@types/node": "^18.7.13",
     "@types/react": "^18.0.17",
+    "@types/yazl": "^2.4.2",
     "electron": "^20.1.0",
-    "esbuild": "^0.15.5"
+    "esbuild": "^0.15.5",
+    "yazl": "^2.5.1"
   }
 }

@@ -1,0 +1,37 @@
+{
+	"manifest_version": 2,
+	"name": "deimos web",
+	"description": "ayooooo",
+	"version": "1.0.0",
+	"author": "vuwints",
+
+	"homepage_url": "https://github.com/vwts/deimos",
+
+	"background": {
+		"scripts": [
+			"background.js"
+		]
+	},
+
+	"content_scripts": [
+		{
+			"run_at": "document_start",
+
+			"matches": [
+				"*://*.discord.com/*"
+			],
+
+			"js": [
+				"content.js"
+			]
+		}
+	],
+
+	"permissions": [
+		"*://*.discord.com/*"
+	],
+
+	"web_accessible_resources": [
+		"dist/Deimos.js"
+	]
+}
