@@ -19,11 +19,13 @@ export default definePlugin({
 					match: /\.isPremium=.;/,
 
 					replace: ".isPremium=true;"
-				}, ...["SPEAKING", "VOICE_STATE_UPDATES", "MEDIA_ENGINE_SET_DESKTOP_SOURCE"].map(event => ({
-					match: new RegExp(`${event}:function\\(.\\){.+?}(,|}\\))`),
+				},
 
-					replace: (_, ending) => `${event}:function(){}${ending}`
-				}))
+				{
+					match: /function (.{1,2})\(\).{0,200}SPOTIFY_AUTO_PAUSED\);.{0,}}}}/,
+
+					replace: "function $1(){}"
+				}
 			]
 		}
     ]
