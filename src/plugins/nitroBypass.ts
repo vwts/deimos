@@ -34,7 +34,9 @@ export default definePlugin({
             replacement: [
                 "canUseAnimatedEmojis",
                 "canUseEmojisEverywhere",
-                "canUseHigherFramerate"
+				"canUseHighVideoQuality",
+                "canStreamHighQuality",
+                "canStreamMidQuality"
             ].map(func => {
                 return {
                     match: new RegExp(`${func}:function\\(.+?}`),
