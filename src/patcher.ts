@@ -93,13 +93,4 @@ electron.app.whenReady().then(() => {
             responseHeaders
         });
     });
-
-    // dropar science e solicitações sentry
-    electron.session.defaultSession.webRequest.onBeforeRequest(
-        {
-            urls: ["https://*/api/v*/science", "https://sentry.io/*"]
-        }, (_, callback) => callback({
-            cancel: true
-        })
-    );
 });
