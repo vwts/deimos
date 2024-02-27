@@ -9,6 +9,9 @@ import gitHash from 'git-hash';
 export const UpdateLogger = new Logger("updater", "white");
 
 export let isOutdated = false;
+export let isNewer = false;
+
+export let updateError: any;
 export let changes: Record<"hash" | "author" | "message", string>[];
 
 async function Unwrap<T>(p: Promise<IpcRes<T>>) {
@@ -24,11 +27,9 @@ export async function checkForUpdates() {
 	changes = await Unwrap(DeimosNative.ipc.invoke<IpcRes<typeof changes>> (IpcEvents.GET_UPDATES));
 
 	if (changes.some(c => c.hash === gitHash)) {
-		// git log NUNCA funciona muito bem
-		//
-		// ele retornará os commits locais mais recentes nesse caso
-		
-		changes = [];
+		isNewer = true;
+
+		return (isOutdated = false);
 	}
 
 	return (isOutdated = changes.length > 0);
