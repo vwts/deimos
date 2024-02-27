@@ -49,7 +49,7 @@ async function uninstall(installations) {
             fs.accessSync(selected.location, fs.constants.W_OK);
         } catch (e) {
             console.error("sem acesso de escrita em", selected.location);
-            console.error("tente rodar esse script como administrador:", "sudo pnpm run unpatch");
+            console.error("tente rodar esse script como administrador:", "sudo pnpm uninject");
 
             process.exit(1);
         }

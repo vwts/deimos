@@ -34,7 +34,7 @@ não fechar o terminal ainda.
 para corrigir o deimos no seu client discord, rode o seguinte comando e siga o prompt interativo.
 
 ```sh
-pnpm run patch
+pnpm inject
 ```
 
 agora feche totalmente o discord. inicie e confirme que o deimos esteja instalado com sucesso checando se você tem a nova sessão deimos nas configurações.
@@ -43,7 +43,7 @@ se você sempre precisar voltar para a pasta deimos, apenas abra um novo termina
 
 todos os plugins são desativados por padrão, então o primeiro passo será abrir as configurações e habilitar os plugins que desejar.
 
-comando para unpatch: `pnpm run unpatch`
+comando para unpatch: `pnpm uninject`
 
 ## instalação (navegador)
 

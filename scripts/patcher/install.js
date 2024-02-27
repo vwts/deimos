@@ -71,7 +71,7 @@ async function install(installations) {
 			console.log("permissões de escrita fornecidas com sucesso para o flatpak do discord.");
 		} catch (e) {
 			console.log("falha ao fornecer permissões de escrita para o flatpak do discord.");
-			console.log("tente rodar esse script como administrador:", "sudo pnpm run patch");
+			console.log("tente rodar esse script como administrador:", "sudo pnpm inject");
 
 			process.exit(1);
 		}
@@ -85,7 +85,7 @@ async function install(installations) {
 			fs.accessSync(selected.location, fs.constants.W_OK);
 		} catch (e) {
 			console.log("sem acesso de escrita para", selected.location);
-			console.error("tente rodar esse script como administrador:", "sudo pnpm run patch");
+			console.error("tente rodar esse script como administrador:", "sudo pnpm inject");
 
 			process.exit(1);
 		}
