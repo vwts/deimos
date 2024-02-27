@@ -1,3 +1,8 @@
 dist
 
 node_modules
+
+venboy.exe
+
+.vscode
+.idea
