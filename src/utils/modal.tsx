@@ -24,12 +24,11 @@ let modalId = 1337;
 export function openModal(Component: React.ComponentType, modalProps: Record<string, any>) {
     let key = `Deimos${modalId++}`;
 
-    modals.openModal(props =>
+    modals.openModal(props => (
         <Modal.ModalRoot {...props} {...modalProps}>
             <Component />
-        </Modal.ModalRoot>, {
-            modalKey: key
-        });
+        </Modal.ModalRoot>
+	), { modalKey: key });
 
     return key;
 };

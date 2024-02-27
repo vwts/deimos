@@ -15,7 +15,7 @@ const logger = new Logger("WebpackInterceptor", "#8caaee");
 Object.defineProperty(window, WEBPACK_CHUNK, {
 	get: () => webpackChunk,
 
-	set: (v) => {
+	set: v => {
 		if (v?.push !== Array.prototype.push) {
 			logger.info(`instalando ${WEBPACK_CHUNK}.push`);
 
@@ -174,7 +174,7 @@ function patchPush() {
 	Object.defineProperty(window[WEBPACK_CHUNK], "push", {
 		get: () => handlePush,
 
-		set: (v) => (handlePush.original = v),
+		set: v => (handlePush.original = v),
 
 		configurable: true
 	});

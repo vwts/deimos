@@ -20,7 +20,7 @@ export default definePlugin({
 				{
 					match: /;(.{1,2}=null;)(?=.{0,50}updateNotice)/g,
 
-					replace: ';if(Deimos.Api.Notices.currentNotice)return !1;$1'
+					replace: ";if(Deimos.Api.Notices.currentNotice)return !1;$1"
 				},
 
 				{

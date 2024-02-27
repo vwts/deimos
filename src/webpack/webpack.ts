@@ -44,7 +44,7 @@ export function _initWebpack(instance: typeof window.webpackChunkdiscord_app) {
     if (cache !== void 0)
         throw "não.";
 
-    wreq = instance.push([[Symbol()], {}, (r) => r]);
+    wreq = instance.push([[Symbol()], {}, r => r]);
     cache = wreq.c;
 
     instance.pop();

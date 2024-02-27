@@ -33,6 +33,6 @@ export default definePlugin({
 			() => chars[Math.floor(Math.random() * chars.length)]
 		).join("");
 
-		return rand + (file.lastIndexOf(".") > -1 ? file.slice(file.lastIndexOf(".")) : "")
+		return rand + (file.lastIndexOf(".") > -1 ? file.slice(file.lastIndexOf(".")) : "");
 	}
 });

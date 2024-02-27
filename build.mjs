@@ -21,7 +21,7 @@ const watch = process.argv.includes("--watch");
  * @type {esbuild.Plugin}
  */
 const makeAllPackagesExternalPlugin = {
-    name: 'make-all-packages-external',
+    name: "make-all-packages-external",
 
     setup(build) {
         let filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;

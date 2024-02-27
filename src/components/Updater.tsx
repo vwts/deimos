@@ -229,7 +229,7 @@ export default ErrorBoundary.wrap(function Updater() {
     };
 
     return (
-        <Forms.FormSection tag="h1" title="Vencord Updater">
+        <Forms.FormSection tag="h1" title="updater deimos">
             <Forms.FormTitle tag="h5">
 				repositório
 			</Forms.FormTitle>

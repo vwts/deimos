@@ -71,7 +71,7 @@ ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => {
 ipcMain.handle(IpcEvents.GET_QUICK_CSS, () => readCss());
 
 ipcMain.handle(IpcEvents.GET_SETTINGS_DIR, () => SETTINGS_DIR);
-ipcMain.on(IpcEvents.GET_SETTINGS, (e) => e.returnValue = readSettings());
+ipcMain.on(IpcEvents.GET_SETTINGS, e => e.returnValue = readSettings());
 
 let settingsWriteQueue = Promise.resolve();
 

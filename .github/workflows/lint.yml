@@ -1,0 +1,26 @@
+name: lint
+
+on:
+	push:
+		branches:
+			- main
+
+	pull_request:
+		branches:
+			- main
+
+jobs:
+	build:
+		runs-on: ubuntu-latest
+
+		steps:
+			- uses: actions/checkout@v2
+
+			- name: instalar pnpm
+				run: npm i -g pnpm
+
+			- name: instalar dependências
+				run: pnpm i
+
+			- name: rodar eslint
+				run: pnpm run lint

@@ -70,7 +70,7 @@ export default ErrorBoundary.wrap(function Settings() {
                         <>
                             {i > 0 && ", "}
 
-                            {Parser.parse('`' + s + '`')}
+                            {Parser.parse("`" + s + "`")}
                         </>
                     ))}</div>
                 </>
@@ -110,7 +110,7 @@ export default ErrorBoundary.wrap(function Settings() {
 			<Forms.FormTitle/>
 
 			<Forms.FormText>
-				SettingsDir: <code style={{ userSelect: 'text', cursor: 'text' }}>
+				SettingsDir: <code style={{ userSelect: "text", cursor: "text" }}>
 					{settingsDir}
 				</code>
 			</Forms.FormText>

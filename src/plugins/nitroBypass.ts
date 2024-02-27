@@ -1,7 +1,6 @@
 import {
     addPreSendListener,
     addPreEditListener,
-    SendListener,
     removePreSendListener,
     removePreEditListener
 } from '../api/MessageEvents';
@@ -30,7 +29,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: `canUseAnimatedEmojis:function`,
+            find: "canUseAnimatedEmojis:function",
 
             replacement: [
                 "canUseAnimatedEmojis",
@@ -89,8 +88,8 @@ export default definePlugin({
                 if (emoji.guildId === guildId && !emoji.animated)
                     continue;
 
-                const emojiString = `<${emoji.animated ? 'a' : ''}:${emoji.originalName || emoji.name}:${emoji.id}>`;
-                const url = emoji.url.replace(/\?size=[0-9]+/, `?size=48`);
+                const emojiString = `<${emoji.animated ? "a" : ""}:${emoji.originalName || emoji.name}:${emoji.id}>`;
+                const url = emoji.url.replace(/\?size=[0-9]+/, "?size=48");
 
                 messageObj.content = messageObj.content.replace(emojiString, (match, offset, origStr) => {
                     return `${getWordBoundary(origStr, offset - 1)}${url}${getWordBoundary(origStr, offset + match.length)}`;
@@ -110,7 +109,7 @@ export default definePlugin({
 				if (!emoji.require_colons)
 					continue;
 
-                const url = emoji.url.replace(/\?size=[0-9]+/, `?size=48`);
+                const url = emoji.url.replace(/\?size=[0-9]+/, "?size=48");
 
                 messageObj.content = messageObj.content.replace(emojiStr, (match, offset, origStr) => {
                     return `${getWordBoundary(origStr, offset - 1)}${url}${getWordBoundary(origStr, offset + match.length)}`;

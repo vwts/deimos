@@ -75,7 +75,7 @@ process.env.DATA_DIR = join(app.getPath("userData"), "..", "Deimos");
 electron.app.whenReady().then(() => {
     installExt(REACT_DEVELOPER_TOOLS)
         .then(() => console.info("devtools do react instalado"))
-        .catch((err) => console.error("falha ao instalar devtools do react", err));
+        .catch(err => console.error("falha ao instalar devtools do react", err));
 
     // remover csp
     electron.session.defaultSession.webRequest.onHeadersReceived(({ responseHeaders, url}, cb) => {

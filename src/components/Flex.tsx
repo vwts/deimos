@@ -1,7 +1,3 @@
-import {
-	PropsWithChildren
-} from 'react';
-
 import type { React } from '../webpack/common';
 
 export function Flex(props: React.PropsWithChildren<{

@@ -65,8 +65,8 @@ function question(question) {
 		terminal: false
 	});
 
-	return new Promise((resolve) => {
-		rl.question(question, (answer) => {
+	return new Promise(resolve => {
+		rl.question(question, answer => {
 			rl.close();
 
 			resolve(answer);
@@ -75,7 +75,7 @@ function question(question) {
 }
 
 async function getMenuItem(installations) {
-	let menuItems = installations.map((info) => ({
+	let menuItems = installations.map(info => ({
 		title: info.patched ? "[MODIFICADO] " + info.location : info.location,
 
 		info
@@ -140,9 +140,9 @@ function getWindowsDirs() {
 
 		const appDirs = fs
 			.readdirSync(location, { withFileTypes: true })
-			.filter((file) => file.isDirectory())
-			.filter((file) => file.name.startsWith("app-"))
-			.map((file) => path.join(location, file.name));
+			.filter(file => file.isDirectory())
+			.filter(file => file.name.startsWith("app-"))
+			.map(file => path.join(location, file.name));
 
 		let versions = [];
 		let patched = false;
@@ -199,9 +199,9 @@ function getDarwinDirs() {
 
         const appDirs = fs
             .readdirSync(location, { withFileTypes: true })
-            .filter((file) => file.isDirectory())
-            .filter((file) => file.name.startsWith("Resources"))
-            .map((file) => path.join(location, file.name));
+            .filter(file => file.isDirectory())
+            .filter(file => file.name.startsWith("Resources"))
+            .map(file => path.join(location, file.name));
 
 		let versions = [];
 		let patched = false;
@@ -272,7 +272,7 @@ function getLinuxDirs() {
 
                 const appDir = path.join(
                     fqDir,
-					
+
                     FLATPAK_NAME_MAPPING[branchName]
                 );
 
@@ -288,9 +288,9 @@ function getLinuxDirs() {
             } else {
                 appDirs = fs
                     .readdirSync(location, { withFileTypes: true })
-                    .filter((file) => file.isDirectory())
-                    .filter((file) => file.name.startsWith("app-") || file.name === "resources")
-                    .map((file) => path.join(location, file.name));
+                    .filter(file => file.isDirectory())
+                    .filter(file => file.name.startsWith("app-") || file.name === "resources")
+                    .map(file => path.join(location, file.name));
             }
 
             let versions = [];

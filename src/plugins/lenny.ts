@@ -24,7 +24,7 @@ export default definePlugin({
 
 			options: [OptionalMessageOption],
 
-			execute: (opts) => ({
+			execute: opts => ({
 				content: findOption(opts, "message", "") + " ( ͡° ͜ʖ ͡°)"
 			})
 		}

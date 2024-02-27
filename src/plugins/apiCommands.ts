@@ -12,7 +12,7 @@ export default definePlugin({
 
 	patches: [
 		{
-			find: `"giphy","tenor"`,
+			find: '"giphy","tenor"',
 
 			replacement: [
 				{

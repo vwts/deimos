@@ -98,7 +98,7 @@ export default definePlugin({
 		}
 
 		// checa todas as regras universais
-		this.universalRules.forEach((rule) => {
+		this.universalRules.forEach(rule => {
 			url.searchParams.forEach((_value, param, parent) => {
 				this.removeParam(rule, param, parent);
 			});
@@ -109,7 +109,7 @@ export default definePlugin({
 			if (!regex.test(url.hostname))
 				return;
 
-			this.rulesByHost.get(hostRuleName).forEach((rule) => {
+			this.rulesByHost.get(hostRuleName).forEach(rule => {
 				url.searchParams.forEach((_value, param, parent) => {
 					this.removeParam(rule, param, parent);
 				});
@@ -123,7 +123,7 @@ export default definePlugin({
 		// apenar roda em mensagens que contém urls
 		if (msg.content.match(/http(s)?:\/\//)) {
 			msg.content = msg.content.replace(
-				/(https?:\/\/[^\s<]+[^<.,:;"'>)|\]\s])/g, (match) => this.replacer(match)
+				/(https?:\/\/[^\s<]+[^<.,:;"'>)|\]\s])/g, match => this.replacer(match)
 			);
 		}
 	},

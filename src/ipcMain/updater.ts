@@ -92,7 +92,7 @@ async function getRepo() {
 async function calculateGitChanges() {
     await git("fetch");
 
-    const res = await git("log", `HEAD...origin/main`, "--pretty=format:%an/%h/%s");
+    const res = await git("log", "HEAD...origin/main", "--pretty=format:%an/%h/%s");
     const commits = res.stdout.trim();
 
     return commits ? commits.split("\n").map(line => {

@@ -110,7 +110,7 @@ zip.outputStream.pipe(createWriteStream("dist/extension.zip")).on("close", () =>
     console.info("extensão escrita em dist/extension.zip");
 });
 
-zip.addFile("dist/browser.js", "dist/Vencord.js");
+zip.addFile("dist/browser.js", "dist/Deimos.js");
 
 ["background.js", "content.js", "manifest.json"].forEach(f => {
     zip.addFile(`browser/${f}`, `${f}`);

@@ -32,7 +32,7 @@ if (electron.desktopCapturer === void 0) {
 		...electron,
 
 		desktopCapturer: {
-			getSources: (opts) => ipcRenderer.invoke(IpcEvents.GET_DESKTOP_CAPTURE_SOURCES, opts)
+			getSources: opts => ipcRenderer.invoke(IpcEvents.GET_DESKTOP_CAPTURE_SOURCES, opts)
 		}
 	};
 }

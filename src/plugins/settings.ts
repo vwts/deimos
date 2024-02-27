@@ -41,7 +41,7 @@ export default definePlugin({
         replacement: {
             match: /\{section:(.{1,2})\.ID\.HEADER,\s*label:(.{1,2})\..{1,2}\.Messages\.ACTIVITY_SETTINGS\}/,
 
-            replace: (m, mod) => `{section:${mod}.ID.HEADER,label:"deimos"},` + `{section:"DeimosSetting",label:"deimos",element:Deimos.Components.Settings},` + `{section:"DeimosUpdater",label:"updater",element:Deimos.Components.Updater,predicate:()=>!IS_WEB},` + `{section:${mod}.ID.DIVIDER},${m}`
+            replace: (m, mod) => '{section:${mod}.ID.HEADER,label:"deimos"},` + `{section:"DeimosSetting",label:"deimos",element:Deimos.Components.Settings},' + '{section:"DeimosUpdater",label:"updater",element:Deimos.Components.Updater,predicate:()=>!IS_WEB},' + '{section:${mod}.ID.DIVIDER},${m}'
         }
     }]
 });
