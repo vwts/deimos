@@ -4,6 +4,10 @@ import {
 
 import definePlugin from '../utils/types';
 
+const WEB_ONLY = (f: string) => () => {
+	throw new Error(`'${f}' funciona apenas para o discord desktop.`);
+};
+
 export default definePlugin({
 	name: "consoleshurtcuts",
 	description: "adiciona aliases curtos para várias coisas na janela. rode `shortcutList` para uma lista.",
@@ -12,8 +16,8 @@ export default definePlugin({
 
 	getShortcuts() {
 		return {
-			toClip: window.DiscordNative.clipboard.copy,
-            fromClip: window.DiscordNative.clipboard.read,
+			toClip: IS_WEB ? WEB_ONLY("toClip") : window.DiscordNative.clipboard.copy,
+            fromClip: IS_WEB ? WEB_ONLY("fromClip") : window.DiscordNative.clipboard.read,
 
             wp: Deimos.Webpack,
             wpc: Deimos.Webpack.wreq.c,
@@ -30,7 +34,7 @@ export default definePlugin({
             Api: Deimos.Api,
 
             reload: () => location.reload(),
-            restart: () => window.DiscordNative.app.relaunch()
+            restart: IS_WEB ? WEB_ONLY("restart") : window.DiscordNative.app.relaunch
 		};
 	},
 
