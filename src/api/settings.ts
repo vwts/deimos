@@ -11,7 +11,6 @@ import IpcEvents from '../utils/IpcEvents';
 
 interface Settings {
 	notifyAboutUpdates: boolean;
-    unsafeRequire: boolean;
     useQuickCss: boolean;
 
     plugins: {
@@ -25,7 +24,6 @@ interface Settings {
 
 const DefaultSettings: Settings = {
 	notifyAboutUpdates: true,
-    unsafeRequire: false,
     useQuickCss: true,
 
     plugins: {}

@@ -43,17 +43,5 @@ export default {
 
             return ipcRenderer.invoke(event, ...args);
         }
-    },
-
-    require(mod: string) {
-        const settings = ipcRenderer.sendSync(IPC_EVENTS.GET_SETTINGS);
-
-        try {
-            if (!JSON.parse(settings).unsafeRequire) throw "não";
-        } catch {
-            throw new Error("require não-seguro não é permitido. habilite-o nas configurações e tente novamente.");
-        }
-
-        return require(mod);
     }
 };

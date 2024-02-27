@@ -165,14 +165,6 @@ export default ErrorBoundary.wrap(function Settings() {
 				notificado quando novas atualizações forem lançadas
 			</Switch>}
 
-            {!IS_WEB && <Switch
-                value={settings.unsafeRequire}
-                onChange={(v: boolean) => settings.unsafeRequire = v}
-                note="habilita deimosnative.require. útil para testes, muito ruim para segurança."
-            >
-                habilitar unsafe require
-            </Switch>}
-
             <Forms.FormDivider />
 
 			<Forms.FormTitle tag="h5" className={classes(Margins.marginTop20, Margins.marginBottom8)}>
