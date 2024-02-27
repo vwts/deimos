@@ -6,6 +6,6 @@ export const REACT_GLOBAL = "Deimos.Webpack.Common.React";
 export const Devs = Object.freeze({
 	Vuw: {
 		name: "vuwints",
-		id: 671809749955641364
+		id: 671809749955641364n
 	}
 });
