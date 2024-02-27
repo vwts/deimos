@@ -35,10 +35,6 @@ import {
     ChangeList
 } from '../utils/ChangeList';
 
-import {
-	IS_WEB
-} from '../utils/isWeb';
-
 import Plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
 import ErrorBoundary from './ErrorBoundary';
@@ -60,7 +56,7 @@ export default ErrorBoundary.wrap(function Settings() {
     const [settingsDir, , settingsDirPending] = useAwaiter(() => DeimosNative.ipc.invoke<string>(IpcEvents.GET_SETTINGS_DIR), "carregando...");
 
     const settings = useSettings();
-    const changes = React.useMemo(() => new ChangeList<string>, []);
+    const changes = React.useMemo(() => new ChangeList<string>(), []);
 
     React.useEffect(() => {
         return () => void (changes.hasChanges && Alerts.show({

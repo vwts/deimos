@@ -1,4 +1,6 @@
 declare global {
+	export var IS_WEB: boolean;
+
     export var DeimosNative: typeof import('./DeimosNative').default;
     export var Deimos: typeof import('./Deimos');
 

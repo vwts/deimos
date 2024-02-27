@@ -2,10 +2,6 @@ import {
 	Devs
 } from '../utils/constants';
 
-import {
-	IS_WEB
-} from '../utils/isWeb';
-
 import definePlugin from '../utils/types';
 import gitHash from 'git-hash';
 

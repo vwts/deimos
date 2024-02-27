@@ -35,6 +35,15 @@ import {
 import './webpack/patchWebpack';
 import './utils/quickCss';
 
+Object.defineProperty(window, "IS_WEB", {
+	get: () => !window.DiscordNative,
+
+	configurable: true,
+	enumerable: true
+});
+
+export let Components;
+
 async function init() {
 	await onceReady;
 
