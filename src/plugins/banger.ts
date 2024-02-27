@@ -1,3 +1,7 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
@@ -13,7 +17,7 @@ export default definePlugin({
 
     patches: [
         {
-            find: "BanConfirm",
+            find: "BAN_CONFIRM_TITLE.",
 
             replacement: {
                 match: /src:\w\(\d+\)/g,

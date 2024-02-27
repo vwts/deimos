@@ -1,15 +1,14 @@
+import {
+	Devs
+} from '../utils/constants';
+
 import definePlugin from '../utils/types';
 
 export default definePlugin({
 	name: "mutenewguild",
 	description: "muta os servidores nos quais você se juntou recentemente",
 
-	authors: [
-		{
-			name: "vuwints",
-			id: 671809749955641364n
-		}
-	],
+	authors: [Devs.Vuw],
 
 	patches: [
 		{
