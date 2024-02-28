@@ -16,21 +16,15 @@ export default definePlugin({
 
             replacement: [
                 {
-                    match: /(\w+)\.isStaff=function\(\){return\s*!1};/,
+                    match: /return\s*(\w+)\.hasFlag\((.+?)\.STAFF\)}/,
 
-                    replace: "$1.isStaff=function(){return true};",
-                },
-
-                {
-                    match: /return\s*\w+\.hasFlag\(.+?STAFF\)}/,
-
-                    replace: "return true}",
+                    replace: "return Deimos.Webpack.Common.UserStore.getCurrentUser().id===$1.id||$1.hasFlag($2.STAFF)}"
                 },
 
                 {
                     match: /hasFreePremium=function\(\){return this.isStaff\(\)\s*\|\|/,
 
-                    replace: "hasFreePremium=function(){return ",
+                    replace: "hasFreePremium=function(){return "
                 }
             ]
 		}
