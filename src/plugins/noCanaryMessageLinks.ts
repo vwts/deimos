@@ -8,7 +8,7 @@ import definePlugin from '../utils/types';
 
 export default definePlugin({
 	name: "nocanarymessagelinks",
-	description: "",
+	description: "remove os prefixos canary e ptb dos links de mensagem",
 
 	authors: [
 		{
