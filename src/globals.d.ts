@@ -8,6 +8,8 @@ declare global {
         set(setting: string, v: any): void;
     };
 
+	export var DiscordNative: any;
+
     interface Window {
         webpackChunkdiscord_app: {
             push(chunk: any): any;
