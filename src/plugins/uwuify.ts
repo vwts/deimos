@@ -54,69 +54,69 @@ function uwuify(message: string): string {
 
 	return message
 		.split(" ")
-		.map(element => {
-			isowo = false;
+		.map(w => {
+			let owofied = false;
 
-			let lowerCase = element.toLowerCase();
+			let lowerCase = w.toLowerCase();
 
 			// retorna se a palavra for curta demais
-			if (element.length < 4) {
-				return element;
+			if (w.length < 4) {
+				return w;
 			}
 
 			// substituindo as palavras baseado no array da linha 33
 			for (let [find, replace] of words) {
-				if (element.includes(find)) {
-					element = element.replace(find, replace);
+				if (w.includes(find)) {
+					w = w.replace(find, replace);
 
-					isowo = true;
+					owofied = true;
 				}
 			}
 
 			// as mudanças mais significativas das palavras
 			if (lowerCase.includes("u") && !lowerCase.includes("uwu")) {
-                element = element.replace("u", "UwU");
+                w = w.replace("u", "UwU");
 
-                isowo = true;
+                owofied = true;
             }
 
             if (lowerCase.includes("o") && !lowerCase.includes("owo")) {
-                element = element.replace("o", "OwO");
+                w = w.replace("o", "OwO");
 
-                isowo = true;
+                owofied = true;
             }
 
-            if (lowerCase.endsWith("y") && element.length < 7) {
-                element = element + " " + "w" + element.slice(1);
+            if (lowerCase.endsWith("y") && w.length < 7) {
+                w = w + " " + "w" + w.slice(1);
 
-                isowo = true;
+                owofied = true;
             }
 
 			// retornando se a palavra já foi mudada com a função uwu
-			if (isowo) {
-				return element;
+			if (owofied) {
+				return w;
 			}
 
 			// mais algumas mudanças mínimas - manter essas palavras que passam pelas mudanças latter
 			if (!lowerCase.endsWith("n")) {
-                element = element.replace("n", "ny");
+                w = w.replace("n", "ny");
             }
 
             if (Math.floor(Math.random() * 2) == 1) {
-                element.replace("s", "sh");
+                w.replace("s", "sh");
             }
 
-            if (Math.floor(Math.random() * 5) == 3 && !isowo) {
-                element = element[0] + "-" + element[0] + "-" + element;
+            if (Math.floor(Math.random() * 5) == 3 && !owofied) {
+                w = w[0] + "-" + w[0] + "-" + w;
             }
 
             if (Math.floor(Math.random() * 5) == 3) {
-                element = element + " " + endings[Math.floor(Math.random() * endings.length)];
+                w = w + " " + endings[Math.floor(Math.random() * endings.length)];
             }
 
-            element = element.replace("r", "w").replace("l", "w");
+            w = w.replaceAll("r", "w").replaceAll("l", "w");
 
-            return element;
+            return w;
 		}).join(" ");
 }
 
