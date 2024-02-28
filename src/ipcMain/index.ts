@@ -34,6 +34,13 @@ const SETTINGS_DIR = join(DATA_DIR, "settings");
 const QUICKCSS_PATH = join(SETTINGS_DIR, "quickCss.css");
 const SETTINGS_FILE = join(SETTINGS_DIR, "settings.json");
 
+const ALLOWED_PROTOCOLS = [
+    "https:",
+    "http:",
+    "steam:",
+    "spotify:"
+];
+
 mkdirSync(SETTINGS_DIR, {
 	recursive: true
 });
@@ -62,7 +69,7 @@ ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => {
 		throw "url mal-estruturado";
 	}
 
-	if (protocol !== "https:" && protocol !== "http:")
+	if (!ALLOWED_PROTOCOLS.includes(protocol))
 		throw "protocolo não-permitido.";
 
 	shell.openExternal(url);
