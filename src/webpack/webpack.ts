@@ -69,7 +69,8 @@ export function find(filter: FilterFn, getDefault = true) {
 		if (mod.exports.default && filter(mod.exports.default))
 			return getDefault ? mod.exports.default : mod.exports;
 
-		for (const nestedMod in mod.exports) if (nestedMod.length < 3) {
+		// 3 é o maior export ofuscado?
+		for (const nestedMod in mod.exports) if (nestedMod.length <= 3) {
             const nested = mod.exports[nestedMod];
 
             if (nested && filter(nested))
@@ -80,7 +81,6 @@ export function find(filter: FilterFn, getDefault = true) {
     return null;
 }
 
-// todo corrigir
 export function findAll(filter: FilterFn, getDefault = true) {
     if (typeof filter !== 'function')
         throw new Error("filtro inválido. função got esperada " + typeof filter);
@@ -102,7 +102,7 @@ export function findAll(filter: FilterFn, getDefault = true) {
 			if (mod.exports.default && filter(mod.exports.default))
 				ret.push(getDefault ? mod.exports.default : mod.exports);
 
-			else for (const nestedMod in mod.exports) if (nestedMod.length < 3) {
+			else for (const nestedMod in mod.exports) if (nestedMod.length <= 3) {
 				const nested = mod.exports[nestedMod];
 
             if (nested && filter(nested))
