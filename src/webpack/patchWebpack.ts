@@ -68,7 +68,7 @@ function patchPush() {
 
 						logger.error("erro no chunk corrigido", err);
 
-						return originalMod(module, exports, require);
+						return void originalMod(module, exports, require);
 					}
 
 					// 11 módulos exportando a janela

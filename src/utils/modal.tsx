@@ -31,7 +31,7 @@ export function openModal(Component: React.ComponentType, modalProps: Record<str
 	), { modalKey: key });
 
     return key;
-};
+}
 
 /**
  * fecha um modal pela chave. o id necessário é fornecido pelo openmodal.

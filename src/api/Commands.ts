@@ -107,6 +107,8 @@ export function unregisterCommand(name: string) {
     BUILT_IN.splice(idx, 1);
 
     delete commands[name];
+
+	return true;
 }
 
 export interface CommandContext {
@@ -177,7 +179,7 @@ export interface Command {
     displayDescription?: string;
 
     options?: Option[];
-	
+
     predicate?(ctx: CommandContext): boolean;
 
     execute(args: Argument[], ctx: CommandContext): CommandReturnValue | void;

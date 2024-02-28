@@ -56,7 +56,7 @@ async function install(installations) {
 	// permissões flatpak
 	if (selected.isFlatpak) {
 		try {
-			const branch = selected.branch;
+			const { branch } = selected;
 			const cwd = process.cwd();
 
 			const globalCmd = `flatpak override ${branch} --filesystem=${cwd}`;

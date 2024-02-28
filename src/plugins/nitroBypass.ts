@@ -81,7 +81,7 @@ export default definePlugin({
 		}
 
         this.preSend = addPreSendListener((_, messageObj) => {
-            const guildId = this.guildId;
+            const { guildId } = this;
 
             for (const emoji of messageObj.validNonShortcutEmojis) {
                 if (!emoji.require_colons)
@@ -100,7 +100,7 @@ export default definePlugin({
         });
 
         this.preEdit = addPreEditListener((_, __, messageObj) => {
-            const guildId = this.guildId;
+            const { guildId } = this;
 
             for (const [emojiStr, _, emojiId] of messageObj.content.matchAll(/(?<!\\)<a?:(\w+):(\d+)>/ig)) {
                 const emoji = getCustomEmojiById(emojiId);

@@ -29,23 +29,23 @@ export default definePlugin({
 	start() {
 		Dispatcher.subscribe("DELETE_PENDING_REPLY", onDeletePendingReply);
 
-		document.addEventListener("keydown", keydown);
+		document.addEventListener("keydown", onKeydown);
 	},
 
 	stop() {
 		Dispatcher.unsubscribe("DELETE_PENDING_REPLY", onDeletePendingReply);
 
-		document.removeEventListener("keydown", keydown);
+		document.removeEventListener("keydown", onKeydown);
 	}
 });
 
 let idx = -1;
 
-const onDeletePendingReply = () => {
+function onDeletePendingReply() {
 	idx = -1;
-};
+}
 
-const keydown = e => {
+function onKeydown(e: KeyboardEvent) {
 	if (
 		(!e.ctrlKey && !e.metaKey) || (e.key !== "ArrowUp" && e.key !== "ArrowDown")
 	) {
@@ -65,7 +65,7 @@ const keydown = e => {
 		idx = messages.length;
 
 	if (idx < 0) {
-		return Dispatcher.dispatch({
+		return void Dispatcher.dispatch({
 			type: "DELETE_PENDING_REPLY", channelId
 		});
 	}
@@ -76,4 +76,4 @@ const keydown = e => {
 		message: messages[idx],
 		showMentionToggle: channel.guild_id !== null
 	});
-};
+}

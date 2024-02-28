@@ -78,7 +78,7 @@ export function useAwaiter<T>(factory: () => Promise<T>, fallbackValue: T | null
     }, []);
 
     return [state.value, state.error, state.pending];
-};
+}
 
 /**
  * um componente lazy. o método factory é chamado no primeiro render.

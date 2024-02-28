@@ -1,6 +1,7 @@
 import electron, {
     contextBridge,
-    webFrame
+    webFrame,
+	ipcRenderer
 } from 'electron';
 
 import {
@@ -10,10 +11,6 @@ import {
 import {
     join
 } from 'path';
-
-import {
-	ipcRenderer
-} from 'electron';
 
 import DeimosNative from './DeimosNative';
 import IpcEvents from './utils/IpcEvents';
