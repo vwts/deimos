@@ -10,17 +10,21 @@ on:
 			- main
 
 jobs:
-	build:
+	Build:
 		runs-on: ubuntu-latest
 
 		steps:
-			- uses: actions/checkout@v2
+		- uses: actions/checkout@v2
+		- uses: pnpm/action-setup@v2 # instalar pnpm utilizando o packagemanager em package.json
 
-			- name: instalar pnpm
-				run: npm i -g pnpm
+		- name: utilizar o node.js 18
+			uses: actions/setup-node@v2
+			with:
+				node-version: 18
+				cache: 'pnpm'
 
-			- name: instalar dependências
-				run: pnpm i
+		- name: instalar dependências
+			run: pnpm install
 
-			- name: rodar eslint
-				run: pnpm run lint
+		- name: construir aliucord
+			run: pnpm lint && pnpm build
