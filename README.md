@@ -45,6 +45,8 @@ todos os plugins são desativados por padrão, então o primeiro passo será abr
 
 comando para unpatch: `pnpm uninject`
 
+leia o [guia de instalação](docs/1_INSTALLING.md)
+
 ## instalação (navegador)
 
 rode os mesmos comandos como o da instalação padrão. agora rode
@@ -56,6 +58,8 @@ pnpm buildWeb
 você irá encontrar a extensão built em `dist/extension.zip`. agora instale essa extensão no seu navegador.
 
 ## contribuindo
+
+veja [CONTRIBUTING.md](CONTRIBUTING.md) e o [guia de plugin](docs/2_PLUGINS.md)
 
 [contribua]: CONTRIBUTING.md
 

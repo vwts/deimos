@@ -4,6 +4,10 @@ antes de tudo, obrigado por se disponibilizar para contribuir!
 
 para inserir sua contribuição é robusto, por favor, siga o guia abaixo.
 
+## guia
+
+para uma introdução amigável para os plugins, veja o [guia de plugin](docs/2_PLUGINS.md)
+
 ## guia de estilização
 
 - esse projeto possui um .editorconfig minimalista. certifique-se de que seu editor o suporte.
