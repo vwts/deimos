@@ -88,7 +88,8 @@ a string do `replacement` utilizado será:
 
 que, utilizando o exemplo acima, substituirá o código por:
 
-> :exclamation: nesse exemplo, `$1` será `abc`
+> **nota**
+> nesse exemplo, `$1` será `abc`
 
 ```js
 abc.isStaff = function () {
@@ -100,4 +101,5 @@ o valor match _pode_ ser uma string, em vez de regex, porém geralmente o regex 
 
 uma vez feito o seu plugin, certifique-se de rodar `pnpm lint` para verificar que seu código esteja correto e limpo, e então abra uma pull request no github :)
 
-> :exclamation: certifique-se de ter lido [CONTRIBUTING.md](../CONTRIBUTING.md) antes de abrir uma pull request
+> **aviso**
+> certifique-se de ter lido [CONTRIBUTING.md](../CONTRIBUTING.md) antes de abrir uma pull request
