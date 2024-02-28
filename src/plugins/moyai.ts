@@ -3,12 +3,18 @@ import {
 } from '../utils/constants';
 
 import {
-	Message
+	Message,
+	ReactionEmoji
 } from 'discord-types/general';
 
 import {
-	FluxDispatcher
+	FluxDispatcher,
+	SelectedChannelStore
 } from '../webpack/common';
+
+import {
+	sleep
+} from '../utils/misc';
 
 import definePlugin from '../utils/types';
 
@@ -21,7 +27,20 @@ interface IMessageCreate {
     message: Message;
 }
 
+interface IReactionAdd {
+	type: "MESSAGE_REACTION_ADD";
+    optimistic: boolean;
+    channelId: string;
+    messageId: string;
+    userId: "195136840355807232";
+    emoji: ReactionEmoji;
+}
+
+const MOYAI = "🗿";
 const MOYAI_URL = "https://github.com/MeguminSama/VencordPlugins/raw/main/plugins/moyai/moyai.mp3";
+
+// implementa quando as configurações forem algo
+const ignoreBots = true;
 
 export default definePlugin({
 	name: "moyai",
@@ -29,76 +48,90 @@ export default definePlugin({
 
 	authors: [Devs.Vuw],
 
-	execute: async (event: IMessageCreate) => {
-		if (event?.type !== "MESSAGE_CREATE")
+	async onMessage(e: IMessageCreate) {
+		if (e.optimistic || e.type !== "MESSAGE_CREATE")
 			return;
 
-        if (!event.message?.content)
+		if (e.message.state === "SENDING")
 			return;
 
-        if (event.message.state === "SENDING")
+		if (ignoreBots && e.message.author?.bot)
 			return;
 
-        if (event.optimistic)
+		if (!e.message.content)
 			return;
 
-		const isInChannel = window.location.pathname.startsWith("/channels/");
-
-		if (!isInChannel)
+		if (e.channelId !== SelectedChannelStore.getChannelId())
 			return;
 
-		const channelId = window.location.pathname.split("/")[3];
-
-		if (!channelId || channelId !== event.channelId)
-			return;
-
-		const moyaiCount = messageContainsMoyai(event.message.content);
-
-		if (!moyaiCount)
-			return;
+		const moyaiCount = getMoyaiCount(e.message.content);
 
 		for (let i = 0; i < moyaiCount; i++) {
-			const audioElement = document.createElement("audio");
+			boom();
 
-			audioElement.src = MOYAI_URL;
-			audioElement.play();
-
-			await new Promise(resolve => setTimeout(resolve, 300));
+			await sleep(300);
 		}
 	},
 
+	onReaction(e: IReactionAdd) {
+		if (e.optimistic || e.type !== "MESSAGE_REACTION_ADD")
+			return;
+
+		if (e.channelId !== SelectedChannelStore.getChannelId())
+			return;
+
+		const name = e.emoji.name.toLowerCase();
+
+		if (name !== MOYAI && !name.includes("moyai") && !name.includes("moai"))
+			return;
+
+		boom();
+	},
+
 	start() {
-        FluxDispatcher.subscribe("MESSAGE_CREATE", this.execute);
+        FluxDispatcher.subscribe("MESSAGE_CREATE", this.onMessage);
+		FluxDispatcher.subscribe("MESSAGE_REACTION_ADD", this.onReaction);
     },
 
     stop() {
-        FluxDispatcher.unsubscribe("MESSAGE_CREATE", this.execute);
+        FluxDispatcher.unsubscribe("MESSAGE_CREATE", this.onMessage);
+		FluxDispatcher.unsubscribe("MESSAGE_REACTION_ADD", this.onReaction);
     }
 });
 
-const EMOJI_NAME_REGEX = /<a?:(\w+):\d+>/g;
+function countOccurrences(sourceString: string, subString: string) {
+	let i = 0;
+	let lastIdx = 0;
 
-function messageContainsMoyai(message: string): number {
-	// captura o número de 🗿 em uma string
-	let moyaiCount = (message.match(/🗿/g) || []).length;
+	while ((lastIdx = sourceString.indexOf(subString, lastIdx) + 1) !== 0)
+		i++;
 
-	// captura o número de emojis em uma mensagem que se chamam "moyai" ou "moai"
-	const emojiNames = message.matchAll(EMOJI_NAME_REGEX);
+	return i;
+}
 
-	if (emojiNames) {
-        for (const emojiName of emojiNames) {
-            if (!emojiName[1])
-				continue;
+function countMatches(sourceString: string, pattern: RegExp) {
+	if (!pattern.global)
+		throw new Error("pattern deve ser global");
 
-            let name = emojiName[1];
+	let i =0;
 
-            // se um emoji inicia ou termina com (moyai|moai)
-            if (/^(moyai|moai)/i.test(name) || /(moyai|moai)$/i.test(name)) {
-                moyaiCount++;
-            }
-        }
-    }
+	while (pattern.test(sourceString))
+		i++;
 
-	// moyai máximo...
-	return Math.min(moyaiCount, 10);
+	return i;
+}
+
+const customMoyaiRe = /<a?:\w*moy?ai\w*:\d{17,20}>/gi;
+
+function getMoyaiCount(message: string) {
+    let count = countOccurrences(message, MOYAI) + countMatches(message, customMoyaiRe);
+
+    return Math.min(count, 10);
+}
+
+function boom() {
+    const audioElement = document.createElement("audio");
+
+    audioElement.src = MOYAI_URL;
+    audioElement.play();
 }
