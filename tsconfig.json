@@ -2,7 +2,13 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "lib": ["DOM", "ESNext", "ESNext.Array", "ESNext.AsyncIterable", "ESNext.Symbol"],
+        "lib": [
+			"DOM",
+			"ESNext",
+			"ESNext.Array",
+			"ESNext.AsyncIterable",
+			"ESNext.Symbol"
+		],
         "module": "CommonJS",
         "moduleResolution": "Node",
         "strict": true,

@@ -26,5 +26,5 @@ jobs:
 		- name: instalar dependências
 			run: pnpm install --frozen-lockfile
 
-		- name: construir aliucord
-			run: pnpm lint && pnpm build
+		- name: lint e teste caso compilado
+			run: pnpm test

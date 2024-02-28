@@ -17,7 +17,7 @@ declare global {
             pop(): any;
         };
 
-        [k: PropertyKey]: any;
+        [k: string]: any;
     }
 }
 
