@@ -6,8 +6,6 @@ deimos_installer
 
 .idea
 
-# dor absoluta causando conflitos na merge
-pnpm-lock.yaml
 yarn.lock
 package-lock.json
 

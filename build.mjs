@@ -147,4 +147,8 @@ await Promise.all([
     console.error("construção falhou");
 
     console.error(err.message);
+
+	// fazer o ci falhar
+	if (!watch)
+		process.exitCode = 1;
 });

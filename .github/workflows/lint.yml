@@ -21,10 +21,10 @@ jobs:
 			uses: actions/setup-node@v2
 			with:
 				node-version: 18
-				cache: 'pnpm'
+				cache: "pnpm"
 
 		- name: instalar dependências
-			run: pnpm install
+			run: pnpm install --frozen-lockfile
 
 		- name: construir aliucord
 			run: pnpm lint && pnpm build

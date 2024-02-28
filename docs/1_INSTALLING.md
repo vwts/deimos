@@ -4,12 +4,19 @@ bem-vindo(a) ao guia de instalação! nesse arquivo, você irá aprender sobre c
 
 ## sessões
 
-- [dependências](#dependências)
-- [instalando o deimos](#instalando-o-deimos)
-- [atualizando o deimos](#atualizando-o-deimos)
-- [desinstalando o deimos](#desinstalando-o-deimos)
-- [instalando manualmente o deimos](#instalando-o-deimos-manualmente)
-- [desinstalando manualmente o deimos](#desinstalando-o-deimos-manualmente)
+- [guia de instalação](#guia-de-instalação)
+	- [sessões](#sessões)
+	- [dependências](#dependências)
+	- [instalando o deimos](#instalando-o-deimos)
+	- [atualizando o deimos](#atualizando-o-deimos)
+	- [desinstalando o deimos](#desinstalando-o-deimos)
+	- [instalando o deimos manualmente](#instalando-o-deimos-manualmente)
+		- [no windows](#para-windows)
+		- [no linux](#para-linux)
+		- [no macos](#para-macos)
+		- [patching manual](#patching-manual)
+		- [desinstalando o deimos manualmente](#desinstalando-o-deimos-manualmente)
+
 
 ## dependências
 
@@ -39,7 +46,7 @@ cd deimos
 instalando as dependências:
 
 ```shell
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 construindo o deimos:
@@ -96,7 +103,7 @@ pnpm uninject
 o comando acima talvez te perguntará para rodar isso:
 
 ```shell
-pnpm install
+pnpm install --frozen-lockfile
 pnpm uninject
 ```
 

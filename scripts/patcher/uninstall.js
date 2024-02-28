@@ -4,7 +4,7 @@ const fs = require('fs');
 console.log("\ndesinstalador deimos\n");
 
 if (!fs.existsSync(path.join(process.cwd(), "node_modules"))) {
-	console.log("você precisa instalar dependências primeiro. rode:", "pnpm install");
+	console.log("você precisa instalar dependências primeiro. rode:", "pnpm install --frozen-lockfile");
 
 	process.exit(1);
 }
