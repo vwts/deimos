@@ -6,6 +6,10 @@ import {
 	Message
 } from 'discord-types/general';
 
+import {
+	FluxDispatcher
+} from '../webpack/common';
+
 import definePlugin from '../utils/types';
 
 interface IMessageCreate {
@@ -38,9 +42,9 @@ export default definePlugin({
         if (event.optimistic)
 			return;
 
-		const isInGuildChannel = window.location.pathname.startsWith("/channels/");
+		const isInChannel = window.location.pathname.startsWith("/channels/");
 
-		if (!isInGuildChannel)
+		if (!isInChannel)
 			return;
 
 		const channelId = window.location.pathname.split("/")[3];
@@ -63,20 +67,13 @@ export default definePlugin({
 		}
 	},
 
-	patches: [
-		{
-			find: "MESSAGE_CREATE:function(",
+	start() {
+        FluxDispatcher.subscribe("MESSAGE_CREATE", this.execute);
+    },
 
-            replacement: [
-                {
-                    match: /MESSAGE_CREATE:function\((\w+)\){/,
-
-                    replace:
-                        "MESSAGE_CREATE:function($1){Deimos.Plugins.plugins.Moyai.execute($1);"
-                }
-            ]
-		}
-	]
+    stop() {
+        FluxDispatcher.unsubscribe("MESSAGE_CREATE", this.execute);
+    }
 });
 
 const EMOJI_NAME_REGEX = /<a?:(\w+):\d+>/g;
@@ -103,8 +100,5 @@ function messageContainsMoyai(message: string): number {
     }
 
 	// moyai máximo...
-	if (moyaiCount > 10)
-		moyaiCount = 10;
-
-    return moyaiCount;
+	return Math.min(moyaiCount, 10);
 }
