@@ -168,3 +168,28 @@ export function classes(...classes: string[]) {
 export function sleep(ms: number): Promise<void> {
 	return new Promise(r => setTimeout(r, ms));
 }
+
+/**
+ * captura uma função
+ *
+ * @param name nome identificando a função capturada. isso aparecerá nos erros logado
+ * @param func função (async ou sync -> ambos funcionam)
+ * @param thisObject thisobject opcional
+ *
+ * @returns função capturada
+ */
+export function suppressErrors<F extends Function>(name: string, func: F, thisObject?: any): F {
+	return (func.constructor.name === "AsyncFunction" ? async function (this: any) {
+		try {
+			await func.apply(thisObject ?? this, arguments);
+		} catch (e) {
+			console.error(`erro capturado em ${name || "anônimo"}\n`, e);
+		}
+	} : function (this: any) {
+		try {
+			func.apply(thisObject ?? this, arguments);
+		} catch (e) {
+			console.error(`erro capturado em ${name || "anônimo"}\n`, e);
+		}
+	}) as any as F;
+}
