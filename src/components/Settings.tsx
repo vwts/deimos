@@ -152,10 +152,18 @@ export default ErrorBoundary.wrap(function Settings() {
             <Switch
                 value={settings.useQuickCss}
                 onChange={(v: boolean) => settings.useQuickCss = v}
-                note="habilitar quickcss"
+                note="carregar estilos do seu arquivo quickcss"
             >
                 usar quickcss
             </Switch>
+
+			{!IS_WEB && <Switch
+				value={settings.enableReactDevtools}
+				onChange={(v: boolean) => settings.enableReactDevtools = v}
+				note="requer uma reinicialização completa"
+			>
+				habilitar ferraments de desenvolvedor do react
+			</Switch>}
 
 			{!IS_WEB && <Switch
 				value={settings.notifyAboutUpdates}

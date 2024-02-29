@@ -49,7 +49,7 @@ function readCss() {
 	return readFile(QUICKCSS_PATH, "utf-8").catch(() => "");
 }
 
-function readSettings() {
+export function readSettings() {
 	try {
 		return readFileSync(SETTINGS_FILE, "utf-8");
 	} catch {

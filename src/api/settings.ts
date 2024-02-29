@@ -9,9 +9,10 @@ import {
 import plugins from 'plugins';
 import IpcEvents from '../utils/IpcEvents';
 
-interface Settings {
+export interface Settings {
 	notifyAboutUpdates: boolean;
     useQuickCss: boolean;
+	enableReactDevtools: boolean;
 
     plugins: {
         [plugin: string]: {
@@ -25,6 +26,7 @@ interface Settings {
 const DefaultSettings: Settings = {
 	notifyAboutUpdates: true,
     useQuickCss: true,
+	enableReactDevtools: false,
 
     plugins: {}
 };

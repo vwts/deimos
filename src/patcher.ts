@@ -3,10 +3,6 @@ import electron, {
     BrowserWindowConstructorOptions
 } from 'electron';
 
-import installExt, {
-    REACT_DEVELOPER_TOOLS
-} from 'electron-devtools-installer';
-
 import {
     join
 } from 'path';
@@ -14,6 +10,10 @@ import {
 import {
     initIpc
 } from './ipcMain';
+
+import {
+	readSettings
+} from './ipcMain/index';
 
 console.log("[deimos] inicializando...");
 
@@ -73,9 +73,19 @@ Object.defineProperty(global, "appSettings", {
 process.env.DATA_DIR = join(app.getPath("userData"), "..", "Deimos");
 
 electron.app.whenReady().then(() => {
-    installExt(REACT_DEVELOPER_TOOLS)
-        .then(() => console.info("devtools do react instalado"))
-        .catch(err => console.error("falha ao instalar devtools do react", err));
+	try {
+        const settings = JSON.parse(readSettings());
+
+        if (settings.enableReactDevtools)
+            import('electron-devtools-installer')
+                .then(({ default: inst, REACT_DEVELOPER_TOOLS }) =>
+                    // @ts-ignore
+
+                    (inst.default ?? inst)(REACT_DEVELOPER_TOOLS)
+                )
+                .then(() => console.info("[deimos] ferramentas de desenvolvedor react instaladas"))
+                .catch(err => console.error("[deimos] falha ao instalar as ferramentas de desenvolvedor react", err));
+    } catch { }
 
     // remover csp
     electron.session.defaultSession.webRequest.onHeadersReceived(({ responseHeaders, url}, cb) => {
