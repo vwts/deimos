@@ -69,7 +69,7 @@ function loadImage(source: File | string) {
 	});
 }
 
-async function resolveImage(options: Argument[], ctx: CommandContext): Promise<File | string | null> {
+async function resolveImage(options: Argument[], ctx: CommandContext, noServerPfp: boolean): Promise<File | string | null> {
 	for (const opt of options) {
 		switch (opt.name) {
 			case "image":
@@ -91,7 +91,7 @@ async function resolveImage(options: Argument[], ctx: CommandContext): Promise<F
 				try {
 					const user = await fetchUser(opt.value);
 
-                    return user.getAvatarURL(ctx.guild, 2048).replace(/\?size=\d+$/, "?size=2048");
+                    return user.getAvatarURL(noServerPfp ? void 0 : ctx.guild?.id, 2048).replace(/\?size=\d+$/, "?size=2048");
 				} catch (err) {
 					console.error("[petpet] falha ao capturar usuário\n", err);
 
@@ -151,6 +151,13 @@ export default definePlugin({
 					description: "usuário no qual a imagem será utilizada a partir do avatar",
 
 					type: ApplicationCommandOptionType.USER
+				},
+
+				{
+					name: "no-server-pfp",
+					description: "usa o avatar padrão em vez do avatar específico ao usar a opção 'user'",
+
+					type: ApplicationCommandOptionType.BOOLEAN
 				}
 			],
 
@@ -163,8 +170,10 @@ export default definePlugin({
 
 				const frames = await getFrames();
 
+				const noServerPfp = findOption(opts, "no-server-pfp", false);
+
 				try {
-					var url = await resolveImage(opts, cmdCtx);
+					var url = await resolveImage(opts, cmdCtx, noServerPfp);
 
 					if (!url)
 						throw "nenhuma imagem especificada!";
